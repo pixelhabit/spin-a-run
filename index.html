@@ -12,6 +12,7 @@
 <title>SPIN-A-RUN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Racing+Sans+One&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#151517; --card:#1f1f23; --card2:#27272d; --line:#35353d;
@@ -42,9 +43,10 @@ h2{margin:6px 0 0;font-size:34px;font-weight:800;line-height:1.1;letter-spacing:
 .splash .tagline{margin:0;color:var(--muted);font-size:16px;font-weight:600;letter-spacing:.02em}
 
 /* Brand */
-.brand{display:flex;align-items:center;gap:14px;margin-top:8px}
-.brand-name{font-size:30px;font-weight:800;line-height:.95;letter-spacing:-.02em}
-.mountains{height:70px;margin:0 -20px}
+.brand{display:flex;align-items:center;gap:14px;margin-top:8px;margin-bottom:-8px}
+.brand-name{font-family:'Racing Sans One', var(--font);text-transform:uppercase;font-size:30px;font-weight:800;line-height:.95;letter-spacing:-.02em}
+.mountains{display:none}
+#simBtn{display:none!important}
 .mountains svg{width:100%;height:100%;display:block}
 
 /* Buttons */
@@ -201,7 +203,7 @@ button:disabled{opacity:.35;cursor:default}
   <div class="mountains" aria-hidden="true">
     <svg viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 70 L50 28 L95 50 L150 8 L205 46 L255 22 L310 52 L355 18 L400 40 L400 70Z" fill="#26262c"/></svg>
   </div>
-  <p class="section-title">Choose a Run</p>
+  <p class="section-title">Choose a level</p>
   <div class="cards">
     <button class="card" data-level="0">
       <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
