@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SPIN-A-RUN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#151517; --card:#1f1f23; --card2:#27272d; --line:#35353d;
+  --fg:#ffffff; --muted:#9a9aa3; --red:#e53935; --dim:#3a3a41;
+  --font:'Inter', system-ui, -apple-system, sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; font-family:var(--font); background:var(--bg); color:var(--fg);
+  min-height:100vh; min-height:100dvh;
+  padding:calc(env(safe-area-inset-top,0px) + 20px) 20px calc(env(safe-area-inset-bottom,0px) + 90px);
+}
+.screen{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.run-screen{gap:12px}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+.small{font-size:14px;margin:0}
+.note{font-size:14px;color:var(--muted);margin:0;line-height:1.5}
+.section-title{font-size:18px;font-weight:700;margin:6px 0 -4px}
+
+h1{margin:0;font-size:40px;font-weight:800;line-height:1.02;letter-spacing:-.02em}
+h2{margin:6px 0 0;font-size:34px;font-weight:800;line-height:1.1;letter-spacing:-.02em}
+
+.splash{position:fixed;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:20;transition:opacity .4s ease}
+.splash.out{opacity:0;pointer-events:none}
+.splash .brand-name{font-size:56px;text-align:center}
+.splash .tagline{margin:0;color:var(--muted);font-size:16px;font-weight:600;letter-spacing:.02em}
+
+/* Brand */
+.brand{display:flex;align-items:center;gap:14px;margin-top:8px}
+.brand-name{font-size:30px;font-weight:800;line-height:.95;letter-spacing:-.02em}
+.mountains{height:70px;margin:0 -20px}
+.mountains svg{width:100%;height:100%;display:block}
+
+/* Buttons */
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+button:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+button:disabled{opacity:.35;cursor:default}
+.primary{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--red);color:#fff;font-size:19px;font-weight:700;padding:17px;border-radius:999px}
+.ghost{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--card2);border:1px solid var(--line);color:#fff;font-size:17px;font-weight:600;padding:15px;border-radius:14px}
+.link{font-size:15px;font-weight:600;color:var(--muted);padding:6px 0;text-align:center;width:100%}
+.link:hover{color:#fff}
+
+/* Setup cards */
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:16px
+}
+.card .ic{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff}
+.card .ic svg{width:36px;height:36px}
+.card .ct{flex:1;display:flex;flex-direction:column;gap:2px}
+.card b{font-size:18px;font-weight:700}
+.card small{font-size:14px;color:var(--muted)}
+.card .chev{font-size:24px;color:var(--muted)}
+.card.sel{border-color:var(--red)}
+
+/* Bottom tabs */
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;
+  background:var(--card);border-top:1px solid var(--line);
+  padding:10px 0 calc(env(safe-area-inset-bottom,0px) + 10px);z-index:10
+}
+.tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:13px;font-weight:600;color:var(--muted);padding:6px 16px}
+.tabs button.on{color:var(--red)}
+
+/* Run readout */
+.kpi{display:flex;flex-direction:column;gap:2px}
+.big{display:flex;align-items:baseline;gap:10px;font-variant-numeric:tabular-nums}
+.big span{font-size:68px;font-weight:800;line-height:.9;letter-spacing:-.04em}
+.big small{font-size:22px;font-weight:600;color:var(--muted)}
+.kpi-label{font-size:14px;color:var(--muted);margin:0}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--line);padding-top:12px}
+.row div{display:flex;flex-direction:column;gap:2px}
+.row div+div{padding-left:14px;border-left:1px solid var(--line)}
+.row span{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.row small{font-size:13px;color:var(--muted)}
+
+/* Challenge card */
+.challenge{background:var(--card);border-left:5px solid var(--red);border-radius:12px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;min-height:72px}
+.challenge[data-type="final"]{border-left-color:#fff}
+.challenge[data-type="done"]{border-left-color:var(--muted)}
+#chLabel{margin:0;font-size:20px;font-weight:700;line-height:1.2}
+.bar{height:8px;background:var(--card2);border-radius:4px;overflow:hidden}
+#chBar{height:100%;width:0;background:var(--red);transition:width .3s}
+
+/* Wheel */
+.wheel-wrap{position:relative;align-self:center;width:min(340px,max(200px,calc(100vh - 440px)),84vw);height:min(340px,max(200px,calc(100vh - 440px)),84vw);margin:0}
+.wheel-wrap::before{
+  content:"";position:absolute;top:-16px;left:50%;transform:translateX(-50%);z-index:4;
+  border-left:12px solid transparent;border-right:12px solid transparent;border-top:46px solid var(--red);
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.5))
+}
+#wheel{width:100%;height:100%;display:block;touch-action:none;cursor:grab}
+.hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:38%;height:38%;border-radius:50%;background:var(--bg);border:3px solid #fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:3;pointer-events:none}
+.hub.final{border-color:var(--red)}
+.hub-value{font-size:30px;font-weight:800;letter-spacing:-.02em;line-height:1;font-variant-numeric:tabular-nums}
+.hub-label{font-size:12px;color:var(--muted);margin-top:6px}
+@keyframes pop{0%{transform:translate(-50%,-50%) scale(1)}40%{transform:translate(-50%,-50%) scale(1.18)}100%{transform:translate(-50%,-50%) scale(1)}}
+.hub.pop{animation:pop .5s ease-out}
+.ring{position:absolute;left:0;top:0;width:100%;height:100%;border-radius:50%;border:5px solid var(--red);opacity:0;pointer-events:none;z-index:2}
+@keyframes ring{0%{transform:scale(.7);opacity:1}100%{transform:scale(1.15);opacity:0}}
+.ring.go{animation:ring .7s ease-out}
+
+/* Buttons used on the run screen */
+.dnf-small{align-self:center;border:1.5px solid var(--red);color:var(--red);font-size:15px;font-weight:700;padding:9px 22px;border-radius:999px}
+.danger{display:block;width:100%;border:2px solid var(--red);color:var(--red);font-size:17px;font-weight:700;padding:14px;border-radius:14px}
+.confirm{display:flex;flex-direction:column;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.confirm p{margin:0;font-size:16px;line-height:1.4}
+.warn{border:1.5px solid var(--red);background:rgba(229,57,53,.12);color:#fff;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:600;line-height:1.35}
+
+/* Summary */
+.done-head{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:6px}
+.check{width:54px;height:54px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:800}
+.done-head h2{text-align:center}
+.stats{display:grid;grid-template-columns:1fr 1fr;background:var(--card);border-radius:16px;padding:6px 16px}
+.stats div{padding:14px 0;border-bottom:1px solid var(--line)}
+.stats div:nth-last-child(-n+2){border-bottom:none}
+.stats div:nth-child(odd){padding-right:12px;border-right:1px solid var(--line)}
+.stats div:nth-child(even){padding-left:16px}
+.stats span{display:block;font-size:30px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stats small{font-size:14px;color:var(--muted)}
+.route{background:var(--card);border-radius:16px;padding:12px;display:flex;justify-content:center}
+.route svg{width:100%;height:auto;max-width:340px}
+.list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.list li{padding:14px 0;border-bottom:1px solid var(--line)}
+.list li.run{cursor:pointer}
+.list li.run:hover{color:var(--red)}
+.list b{display:block;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.list .meta{font-size:14px;color:var(--muted);margin-top:2px}
+.tag{display:inline-block;font-size:12px;font-weight:700;color:#fff;background:var(--red);border-radius:999px;padding:2px 8px;margin-left:8px;vertical-align:middle}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* Hexagon medals */
+.hex{
+  width:84px;height:96px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:var(--red);color:#fff;font-size:22px;font-weight:800
+}
+.hex.dim{background:var(--dim);color:var(--muted)}
+.hex.sm{width:66px;height:76px;font-size:17px}
+.hex.lg{width:104px;height:118px;font-size:28px}
+.medal-block{display:flex;align-items:center;gap:18px;background:var(--card);border-radius:16px;padding:14px 16px}
+.medal-block b{font-size:20px;display:block}
+.medal-block small{color:var(--muted);font-size:14px}
+.medal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.medal-tile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 6px;background:var(--card);border-radius:16px;cursor:pointer;text-align:center}
+.medal-tile b{font-size:13px;font-weight:700}
+.medal-tile small{color:var(--muted);font-size:12px}
+.medal-tile.locked{opacity:.55}
+
+/* History chips */
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{padding:8px 14px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:14px}
+.chip.on{background:var(--red);border-color:var(--red);color:#fff}
+</style>
+</head>
+<body>
+
+<div id="splash" class="splash">
+  <svg width="180" height="180" viewBox="0 0 1254 1254" aria-hidden="true"><path d="M142 137 L107 177 L83 217 L67 258 L59 303 L59 944 L64 979 L81 1032 L102 1072 L130 1109 L152 1131 L173 1148 L217 1174 L258 1188 L301 1194 L965 1193 L1002 1186 L1033 1175 L1065 1158 L1099 1133 L1132 1099 L1162 1055 L1172 1035 L1186 995 L1194 945 L1193 297 L1184 255 L1170 219 L1146 178 L1114 140 L1084 114 L1035 86 L983 69 L945 64 L303 64 L277 67 L252 73 L217 86 L172 112 Z" fill="#000000"/><path d="M589 565 L577 574 L548 608 L547 617 L551 622 L555 624 L563 622 L594 590 L623 593 L624 596 L572 681 L567 686 L511 712 L507 717 L506 723 L512 732 L522 733 L577 711 L588 704 L613 671 L618 669 L658 693 L656 701 L630 759 L631 766 L634 770 L638 772 L645 772 L651 767 L687 694 L687 684 L684 679 L639 646 L660 615 L679 635 L686 639 L691 639 L741 615 L745 610 L746 604 L741 596 L732 594 L691 612 L666 583 L651 572 L640 569 Z M670 517 L661 521 L654 528 L650 536 L649 548 L653 559 L661 567 L670 571 L681 571 L691 567 L700 558 L703 551 L703 537 L700 530 L691 521 L682 517 Z M521 253 L483 266 L439 287 L417 300 L390 319 L365 340 L339 366 L305 408 L282 444 L262 483 L244 532 L235 572 L231 604 L230 649 L233 686 L239 720 L247 751 L259 785 L282 833 L309 875 L328 899 L367 940 L387 957 L421 981 L450 998 L479 1012 L515 1025 L548 1033 L586 1039 L613 1041 L665 1039 L700 1033 L751 1018 L780 1006 L813 989 L843 970 L878 943 L909 913 L937 880 L960 846 L978 813 L994 775 L1004 743 L1012 705 L1017 657 L1017 620 L1013 579 L1003 532 L980 468 L965 439 L946 409 L903 357 L864 322 L827 296 L808 285 L755 261 L699 245 L692 244 L685 261 L686 263 L718 270 L748 280 L779 293 L820 316 L816 325 L718 481 L715 483 L701 475 L675 465 L636 458 L612 458 L590 461 L570 466 L535 481 L469 377 L432 314 L454 301 L496 282 L537 269 L568 263 L561 244 Z M813 965 L772 988 L740 1001 L702 1012 L648 1020 L592 1019 L535 1009 L487 993 L454 977 L436 966 L538 805 L560 815 L588 823 L608 826 L640 826 L675 819 L711 803 L720 814 Z M445 689 L458 722 L475 750 L501 779 L523 796 L422 956 L420 956 L381 926 L352 897 L320 857 L301 827 L283 792 L266 746 L283 739 Z M994 651 L996 653 L995 678 L985 734 L972 776 L951 821 L929 856 L897 896 L861 931 L828 955 L739 815 L727 793 L754 770 L768 753 L782 731 L796 699 L803 670 L804 653 L806 651 Z M254 583 L262 583 L437 624 L441 627 L440 659 L442 673 L263 729 L261 727 L256 706 L250 658 L250 619 Z M611 475 L644 476 L681 485 L706 497 L733 517 L757 544 L776 578 L784 603 L788 632 L786 668 L778 698 L767 722 L748 750 L721 776 L692 794 L665 804 L638 809 L609 809 L574 802 L546 790 L518 771 L498 751 L477 721 L461 683 L456 656 L457 622 L463 596 L477 564 L496 536 L519 513 L543 496 L578 481 Z M836 327 L863 347 L899 382 L929 420 L953 460 L972 502 L986 548 L995 597 L995 634 L806 634 L804 632 L803 613 L798 590 L783 553 L762 522 L751 510 L731 493 L797 386 Z M417 324 L520 490 L506 501 L487 520 L468 546 L452 578 L444 607 L439 608 L259 566 L257 564 L272 511 L283 485 L309 437 L332 405 L353 380 L381 352 Z M566 174 L558 180 L555 189 L556 194 L619 335 L624 339 L629 339 L635 333 L661 272 L698 192 L697 183 L692 176 L685 173 Z" fill="#ffffff" fill-rule="evenodd"/><path d="M255 583 L251 623 L251 653 L255 692 L263 728 L356 698 L441 673 L438 647 L439 626 Z" fill="#e51e14" fill-rule="evenodd"/></svg>
+  <div class="brand-name">SPIN-A-RUN</div>
+  <p class="tagline">Spin. Run. Repeat.</p>
+</div>
+
+<section id="screen-setup" class="screen">
+  <div class="brand">
+    <svg width="58" height="58" viewBox="0 0 1254 1254" aria-hidden="true"><path d="M142 137 L107 177 L83 217 L67 258 L59 303 L59 944 L64 979 L81 1032 L102 1072 L130 1109 L152 1131 L173 1148 L217 1174 L258 1188 L301 1194 L965 1193 L1002 1186 L1033 1175 L1065 1158 L1099 1133 L1132 1099 L1162 1055 L1172 1035 L1186 995 L1194 945 L1193 297 L1184 255 L1170 219 L1146 178 L1114 140 L1084 114 L1035 86 L983 69 L945 64 L303 64 L277 67 L252 73 L217 86 L172 112 Z" fill="#000000"/><path d="M589 565 L577 574 L548 608 L547 617 L551 622 L555 624 L563 622 L594 590 L623 593 L624 596 L572 681 L567 686 L511 712 L507 717 L506 723 L512 732 L522 733 L577 711 L588 704 L613 671 L618 669 L658 693 L656 701 L630 759 L631 766 L634 770 L638 772 L645 772 L651 767 L687 694 L687 684 L684 679 L639 646 L660 615 L679 635 L686 639 L691 639 L741 615 L745 610 L746 604 L741 596 L732 594 L691 612 L666 583 L651 572 L640 569 Z M670 517 L661 521 L654 528 L650 536 L649 548 L653 559 L661 567 L670 571 L681 571 L691 567 L700 558 L703 551 L703 537 L700 530 L691 521 L682 517 Z M521 253 L483 266 L439 287 L417 300 L390 319 L365 340 L339 366 L305 408 L282 444 L262 483 L244 532 L235 572 L231 604 L230 649 L233 686 L239 720 L247 751 L259 785 L282 833 L309 875 L328 899 L367 940 L387 957 L421 981 L450 998 L479 1012 L515 1025 L548 1033 L586 1039 L613 1041 L665 1039 L700 1033 L751 1018 L780 1006 L813 989 L843 970 L878 943 L909 913 L937 880 L960 846 L978 813 L994 775 L1004 743 L1012 705 L1017 657 L1017 620 L1013 579 L1003 532 L980 468 L965 439 L946 409 L903 357 L864 322 L827 296 L808 285 L755 261 L699 245 L692 244 L685 261 L686 263 L718 270 L748 280 L779 293 L820 316 L816 325 L718 481 L715 483 L701 475 L675 465 L636 458 L612 458 L590 461 L570 466 L535 481 L469 377 L432 314 L454 301 L496 282 L537 269 L568 263 L561 244 Z M813 965 L772 988 L740 1001 L702 1012 L648 1020 L592 1019 L535 1009 L487 993 L454 977 L436 966 L538 805 L560 815 L588 823 L608 826 L640 826 L675 819 L711 803 L720 814 Z M445 689 L458 722 L475 750 L501 779 L523 796 L422 956 L420 956 L381 926 L352 897 L320 857 L301 827 L283 792 L266 746 L283 739 Z M994 651 L996 653 L995 678 L985 734 L972 776 L951 821 L929 856 L897 896 L861 931 L828 955 L739 815 L727 793 L754 770 L768 753 L782 731 L796 699 L803 670 L804 653 L806 651 Z M254 583 L262 583 L437 624 L441 627 L440 659 L442 673 L263 729 L261 727 L256 706 L250 658 L250 619 Z M611 475 L644 476 L681 485 L706 497 L733 517 L757 544 L776 578 L784 603 L788 632 L786 668 L778 698 L767 722 L748 750 L721 776 L692 794 L665 804 L638 809 L609 809 L574 802 L546 790 L518 771 L498 751 L477 721 L461 683 L456 656 L457 622 L463 596 L477 564 L496 536 L519 513 L543 496 L578 481 Z M836 327 L863 347 L899 382 L929 420 L953 460 L972 502 L986 548 L995 597 L995 634 L806 634 L804 632 L803 613 L798 590 L783 553 L762 522 L751 510 L731 493 L797 386 Z M417 324 L520 490 L506 501 L487 520 L468 546 L452 578 L444 607 L439 608 L259 566 L257 564 L272 511 L283 485 L309 437 L332 405 L353 380 L381 352 Z M566 174 L558 180 L555 189 L556 194 L619 335 L624 339 L629 339 L635 333 L661 272 L698 192 L697 183 L692 176 L685 173 Z" fill="#ffffff" fill-rule="evenodd"/><path d="M255 583 L251 623 L251 653 L255 692 L263 728 L356 698 L441 673 L438 647 L439 626 Z" fill="#e51e14" fill-rule="evenodd"/></svg>
+    <div class="brand-name">SPIN-A-RUN</div>
+  </div>
+  <div class="mountains" aria-hidden="true">
+    <svg viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 70 L50 28 L95 50 L150 8 L205 46 L255 22 L310 52 L355 18 L400 40 L400 70Z" fill="#26262c"/></svg>
+  </div>
+  <p class="section-title">Choose a Run</p>
+  <div class="cards">
+    <button class="card" data-level="0">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ct"><b>Rookie</b><small>200 m to 500 m</small></span><span class="chev">›</span>
+    </button>
+    <button class="card" data-level="1">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ct"><b>Casual</b><small>500 m to 2 km</small></span><span class="chev">›</span>
+    </button>
+    <button class="card" data-level="2">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ct"><b>Intermediate</b><small>2 km to 5 km</small></span><span class="chev">›</span>
+    </button>
+    <button class="card" data-level="3">
+      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ct"><b>Crazy</b><small>5 km to 10 km. Long, slow runs.</small></span><span class="chev">›</span>
+    </button>
+  </div>
+  <button id="startBtn" class="primary" disabled>▶ Start Run</button>
+  <button id="simBtn" class="link" disabled>Simulate GPS for indoor testing</button>
+  <p class="note">Real GPS needs location permission and works best outdoors with the screen on.</p>
+</section>
+
+<section id="screen-run" class="screen run-screen hidden">
+  <div class="kpi">
+    <div class="big"><span id="sDist">0.00</span><small>km</small></div>
+    <p class="kpi-label">Total Distance</p>
+  </div>
+  <div class="row">
+    <div><span id="sTime">00:00</span><small>Time</small></div>
+    <div><span id="sPace">--:--</span><small>Avg /km</small></div>
+    <div><span id="sSpeed">--:--</span><small>Now /km</small></div>
+  </div>
+  <div class="challenge" id="challengeBox">
+    <p id="chLabel">Ready</p>
+    <div class="bar"><div id="chBar"></div></div>
+    <p id="chProgress" class="small muted"></p>
+  </div>
+  <div id="warn" class="warn hidden"></div>
+  <div class="wheel-wrap"><div id="ring" class="ring"></div><canvas id="wheel" width="640" height="640"></canvas><div id="hub" class="hub"><span id="hubValue" class="hub-value">--</span><span id="hubLabel" class="hub-label">spin</span></div></div>
+  <button id="spinBtn" class="primary">Spin</button>
+  <button id="dnfBtn" class="dnf-small">End Run</button>
+  <div id="dnfConfirm" class="confirm hidden">
+    <p>End this run as a DNF? It stays in your history but earns no medal.</p>
+    <button id="dnfYes" class="danger">Yes, end as DNF</button>
+    <button id="dnfNo" class="primary">Keep running</button>
+  </div>
+  <p id="gpsStatus" class="small muted"></p>
+</section>
+
+<section id="screen-summary" class="screen hidden">
+  <div class="done-head">
+    <span class="check" id="sumCheck">✓</span>
+    <h2 id="sumTitle">Run Complete!</h2>
+    <p id="sumDate" class="small muted" style="text-align:center"></p>
+  </div>
+  <div class="stats" id="sumStats"></div>
+  <div id="sumMedal"></div>
+  <p id="sumTrophy" class="note"></p>
+  <p class="section-title">Route</p>
+  <div class="route" id="sumRoute"></div>
+  <p class="section-title">Challenges</p>
+  <ul class="list" id="sumList"></ul>
+  <div class="row2">
+    <button id="shareBtn" class="ghost">Share</button>
+    <button id="saveBtn" class="ghost">Save image</button>
+  </div>
+  <p id="saveNote" class="small muted"></p>
+  <button id="backBtn" class="primary">Done</button>
+</section>
+
+<section id="screen-history" class="screen hidden">
+  <h1>Run History</h1>
+  <div class="chips" id="histChips"></div>
+  <ul class="list" id="histList"></ul>
+  <p id="histEmpty" class="note hidden">No saved runs yet. Finish a run to see it here.</p>
+</section>
+
+<section id="screen-medals" class="screen hidden">
+  <h1>Medal Case</h1>
+  <p class="section-title">Trophies</p>
+  <div class="medal-grid" id="trophyGrid"></div>
+  <p class="section-title">Medals</p>
+  <div class="medal-grid" id="medalGrid"></div>
+  <p id="medalEmpty" class="note hidden">No medals yet. Complete a run to earn one.</p>
+</section>
+
+<nav class="tabs" id="tabs">
+  <button data-tab="setup">Run</button>
+  <button data-tab="history">History</button>
+  <button data-tab="medals">Medals</button>
+</nav>
+
+<script>
+const $ = id => document.getElementById(id);
+const STORE_KEY = 'spinrun.runs';
+const FONT = "'Inter', system-ui, sans-serif";
+const INK = '#151517', WHITE = '#ffffff', MUTED = '#9a9aa3', RED = '#e53935', SLICE = '#2b2b31';
+const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// ---------- Game settings ----------
+const LEVELS = {
+  0: {name:'Kids',         dists:[200, 350, 500]},
+  1: {name:'Beginner',     dists:[500, 1000, 2000]},
+  2: {name:'Intermediate', dists:[2000, 3000, 5000]},
+  3: {name:'Wild',         dists:[5000, 8000, 10000]}
+};
+const OPENER_M = 3000;        // warm-up run before the first spin (Kids: 200 m)
+const FINAL_M = 1000;         // finish run, reached by landing on the small slice
+const FINAL_WEIGHT = 0.35;    // finish slice is about a third of a normal slice
+const NORMAL_SLICES = 6;      // normal slices per wheel
+
+// Kids is level 0; display helpers keep it from showing as 'Level 0'
+const LEVEL_NAMES = {0: 'Rookie', 1: 'Casual', 2: 'Intermediate', 3: 'Crazy'};
+function levelName(l){ return LEVEL_NAMES[l] || 'Unknown level'; }
+function medalCode(l){ if(l === 0) return 'K'; return l ? `L${l}` : 'L?'; }
+function fmtDist(m){ return m >= 1000 ? (m/1000) + ' km' : m + ' m'; }
+function mkDist(m){ return {type:'distance', target:m, short:fmtDist(m), label:`${fmtDist(m)}`}; }
+function fmtTime(s){
+  s = Math.floor(s); const h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60;
+  const pad = n => String(n).padStart(2,'0');
+  return h ? `${h}:${pad(m)}:${pad(x)}` : `${pad(m)}:${pad(x)}`;
+}
+function fmtPace(secPerKm){
+  if(!isFinite(secPerKm) || secPerKm > 3600) return '--:--';
+  const m = Math.floor(secPerKm/60), s = Math.round(secPerKm%60);
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+// ---------- State ----------
+let level = null, simulate = false, histFilter = 'all';
+let running = false, finished = false, spinning = false, angle = 0;
+let slices = [], current = null, completed = [];
+let last = null, recent = [], route = [], totalDist = 0, startT = 0;
+let watchId = null, simTimer = null, tickTimer = null;
+let simLat = 14.5995, simLon = 120.9842, simSpeed = 3;
+let summaryBackTo = 'setup', currentDetail = null;
+
+// ---------- Geometry ----------
+function haversine(lat1, lon1, lat2, lon2){
+  const R = 6371000, toR = x => x*Math.PI/180;
+  const dLat = toR(lat2-lat1), dLon = toR(lon2-lon1);
+  const h = Math.sin(dLat/2)**2 + Math.cos(toR(lat1))*Math.cos(toR(lat2))*Math.sin(dLon/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function speedNow(){
+  const now = Date.now();
+  const w = recent.filter(r => now - r.t <= 8000);
+  const dt = w.reduce((a,r) => a + r.dt, 0);
+  const d = w.reduce((a,r) => a + r.d, 0);
+  return dt > 0 ? d/dt : 0; // m/s
+}
+
+// ---------- Alerts: vibration + short chime when it's time to spin ----------
+let audioCtx = null;
+function unlockAudio(){
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+  } catch(e) { audioCtx = null; }
+}
+function alertNeedSpin(){
+  if(navigator.vibrate) navigator.vibrate([250, 120, 250, 120, 400]);
+  if(!audioCtx) return;
+  try {
+    const t = audioCtx.currentTime;
+    [0, 0.18, 0.36].forEach((dt, i) => {
+      const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+      o.type = 'square';
+      o.frequency.value = i === 2 ? 1046 : 784;
+      g.gain.setValueAtTime(0.0001, t + dt);
+      g.gain.exponentialRampToValueAtTime(0.25, t + dt + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dt + 0.14);
+      o.connect(g).connect(audioCtx.destination);
+      o.start(t + dt); o.stop(t + dt + 0.16);
+    });
+  } catch(e) {}
+}
+
+// ---------- Wake lock: keep the screen on during a run ----------
+let wakeLock = null;
+async function keepAwake(){
+  try {
+    if('wakeLock' in navigator){
+      wakeLock = await navigator.wakeLock.request('screen');
+      wakeLock.addEventListener('release', () => { wakeLock = null; });
+    }
+  } catch(e) {}
+}
+function releaseAwake(){
+  try { if(wakeLock){ wakeLock.release(); wakeLock = null; } } catch(e) {}
+}
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible' && running) keepAwake();
+});
+
+// ---------- Storage (per device, browser only) ----------
+function loadRuns(){
+  try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); }
+  catch(e){ return []; }
+}
+function saveRuns(runs){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(runs)); return true; }
+  catch(e){ return false; }
+}
+function sampleRoute(pts, max = 300){
+  if(pts.length <= max) return pts.map(p => ({lat:p.lat, lon:p.lon}));
+  const out = [];
+  for(let i = 0; i < max; i++){
+    const p = pts[Math.round(i*(pts.length-1)/(max-1))];
+    out.push({lat:p.lat, lon:p.lon});
+  }
+  return out;
+}
+
+// ---------- Route drawing (no external map tiles) ----------
+function projectRoute(pts, w, h, pad){
+  const cos = Math.cos(pts[0].lat * Math.PI/180);
+  const xs = pts.map(p => p.lon * cos), ys = pts.map(p => -p.lat);
+  const minX = Math.min(...xs), maxX = Math.max(...xs);
+  const minY = Math.min(...ys), maxY = Math.max(...ys);
+  const sx = (maxX - minX) || 1e-9, sy = (maxY - minY) || 1e-9;
+  const k = Math.min((w - 2*pad)/sx, (h - 2*pad)/sy);
+  const offX = pad + ((w - 2*pad) - sx*k)/2;
+  const offY = pad + ((h - 2*pad) - sy*k)/2;
+  return pts.map((_, i) => [offX + (xs[i] - minX)*k, offY + (ys[i] - minY)*k]);
+}
+function routeSVG(pts){
+  if(!pts || pts.length < 2)
+    return '<p class="muted small" style="margin:8px">Not enough GPS points to draw a route.</p>';
+  const P = projectRoute(pts, 300, 300, 20);
+  const line = P.map(([x,y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+  const s = P[0], e = P[P.length-1];
+  return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="${line}" fill="none" stroke="${RED}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${s[0].toFixed(1)}" cy="${s[1].toFixed(1)}" r="8" fill="${MUTED}"/>
+    <circle cx="${e[0].toFixed(1)}" cy="${e[1].toFixed(1)}" r="8" fill="${WHITE}"/>
+  </svg>`;
+}
+function drawRouteCanvas(g, pts, x, y, w, h){
+  const P = projectRoute(pts, w, h, 60);
+  g.save();
+  g.translate(x, y);
+  g.beginPath();
+  P.forEach(([px, py], i) => i ? g.lineTo(px, py) : g.moveTo(px, py));
+  g.strokeStyle = RED; g.lineWidth = 10; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke();
+  const s = P[0], e = P[P.length-1];
+  g.beginPath(); g.arc(s[0], s[1], 16, 0, 2*Math.PI); g.fillStyle = MUTED; g.fill();
+  g.beginPath(); g.arc(e[0], e[1], 16, 0, 2*Math.PI); g.fillStyle = WHITE; g.fill();
+  g.restore();
+}
+
+// ---------- Screens and tabs ----------
+function show(name){
+  ['setup','run','summary','history','medals'].forEach(n => $('screen-'+n).classList.toggle('hidden', n !== name));
+  $('tabs').classList.toggle('hidden', !['setup','history','medals'].includes(name));
+  document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('on', b.dataset.tab === name));
+}
+document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => {
+  const t = b.dataset.tab;
+  if(t === 'setup') show('setup');
+  else if(t === 'history') showHistory();
+  else showMedals();
+});
+
+// ---------- Setup ----------
+document.querySelectorAll('[data-level]').forEach(b => b.onclick = () => {
+  level = Number(b.dataset.level);
+  document.querySelectorAll('[data-level]').forEach(x => {
+    const on = x === b;
+    x.classList.toggle('sel', on);
+    x.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+  $('startBtn').disabled = false;
+  $('simBtn').disabled = false;
+});
+$('startBtn').onclick = () => { simulate = false; start(); };
+$('simBtn').onclick = () => { simulate = true; start(); };
+$('backBtn').onclick = () => {
+  if(summaryBackTo === 'history') showHistory();
+  else if(summaryBackTo === 'medals') showMedals();
+  else show('setup');
+};
+
+// ---------- History ----------
+const HIST_FILTERS = [['all','All'],['0','Rookie'],['1','Casual'],['2','Intermediate'],['3','Crazy']];
+function renderChips(){
+  const box = $('histChips'); box.innerHTML = '';
+  HIST_FILTERS.forEach(([v, l]) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (histFilter === v ? ' on' : '');
+    b.textContent = l;
+    b.onclick = () => { histFilter = v; showHistory(); };
+    box.appendChild(b);
+  });
+}
+function showHistory(){
+  renderChips();
+  const runs = loadRuns().filter(r => histFilter === 'all' || String(r.level) === histFilter);
+  const ul = $('histList'); ul.innerHTML = '';
+  $('histEmpty').classList.toggle('hidden', runs.length > 0);
+  runs.forEach(run => {
+    const li = document.createElement('li');
+    li.className = 'run';
+    li.tabIndex = 0;
+    li.innerHTML = '<b></b><div class="meta"></div>';
+    li.querySelector('b').append(`${run.km.toFixed(2)} km · ${fmtTime(run.sec)}`);
+    if(run.dnf){ const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'DNF'; li.querySelector('b').append(t); }
+    li.querySelector('.meta').textContent = `${new Date(run.date).toLocaleString()} · ${levelName(run.level)} · ${run.challenges.length} challenges`;
+    li.onclick = () => showRunDetail(run, false, 'history');
+    li.onkeydown = e => { if(e.key === 'Enter') showRunDetail(run, false, 'history'); };
+    ul.appendChild(li);
+  });
+  show('history');
+}
+
+// ---------- Trophies: awarded for a single completed run at least this long (DNFs excluded) ----------
+const TROPHIES = [
+  {km: 10, name: '10 km', badge: '10K'},
+  {km: 21.0975, name: 'Half Marathon', badge: '21K'},
+  {km: 42.195, name: 'Marathon', badge: '42K'},
+  {km: 50, name: 'Ultramarathon', badge: '50K'}
+];
+const EPS = 0.001;
+function newTrophies(prevRuns, run){
+  if(run.dnf) return [];
+  return TROPHIES.filter(t => run.km >= t.km - EPS && !prevRuns.some(r => !r.dnf && r.km >= t.km - EPS)).map(t => t.name);
+}
+// Date of the first completed run that earned a trophy
+function trophyDate(runs, t){
+  const run = runs.filter(r => !r.dnf && r.km >= t.km - EPS).slice().reverse()[0];
+  return run ? new Date(run.date) : null;
+}
+function renderTrophies(){
+  const runs = loadRuns();
+  const grid = $('trophyGrid'); grid.innerHTML = '';
+  TROPHIES.forEach(t => {
+    const earned = runs.some(r => !r.dnf && r.km >= t.km - EPS);
+    const tile = document.createElement('div');
+    tile.className = 'medal-tile' + (earned ? '' : ' locked');
+    tile.innerHTML = `<div class="hex sm ${earned ? '' : 'dim'}"></div><b></b><small></small>`;
+    tile.querySelector('.hex').textContent = earned ? t.badge : '🔒';
+    tile.querySelector('b').textContent = t.name;
+    const d = earned ? trophyDate(runs, t) : null;
+    tile.querySelector('small').textContent = earned
+      ? (d ? d.toLocaleDateString() : 'Earned')
+      : `Complete a ${t.name} run`;
+    grid.appendChild(tile);
+  });
+}
+
+// ---------- Medal case ----------
+function showMedals(){
+  renderTrophies();
+  const runs = loadRuns().filter(r => !r.dnf);
+  const grid = $('medalGrid'); grid.innerHTML = '';
+  $('medalEmpty').classList.toggle('hidden', runs.length > 0);
+  runs.forEach(run => {
+    const tile = document.createElement('div');
+    tile.className = 'medal-tile';
+    tile.tabIndex = 0;
+    tile.innerHTML = '<div class="hex sm"></div><b></b><small></small>';
+    tile.querySelector('.hex').textContent = medalCode(run.level);
+    tile.querySelector('b').textContent = `${run.km.toFixed(2)} km`;
+    tile.querySelector('small').textContent = new Date(run.date).toLocaleDateString();
+    tile.onclick = () => showRunDetail(run, false, 'medals');
+    tile.onkeydown = e => { if(e.key === 'Enter') showRunDetail(run, false, 'medals'); };
+    grid.appendChild(tile);
+  });
+  show('medals');
+}
+
+// ---------- Run lifecycle ----------
+function resetRun(){
+  running = false; finished = false; spinning = false;
+  slices = []; current = null; completed = [];
+  last = null; recent = []; route = []; totalDist = 0;
+  $('chLabel').textContent = 'Ready';
+  $('chBar').style.width = '0%';
+  $('chProgress').textContent = '';
+  $('challengeBox').removeAttribute('data-type');
+  $('warn').classList.add('hidden');
+  $('dnfConfirm').classList.add('hidden');
+  $('dnfBtn').classList.remove('hidden');
+}
+
+function start(){
+  if(level === null) return;
+  resetRun();
+  show('run');
+  unlockAudio();
+  running = true;
+  keepAwake();
+  startT = Date.now();
+  buildWheel();
+  drawWheel();
+  tickTimer = setInterval(tick, 1000);
+  if(simulate) startSim(); else startGPS();
+  // Warm-up run comes before the first spin
+  const openerM = level === 0 ? 200 : OPENER_M;
+  current = {type:'distance', target:openerM, progress:0, label:`Warm-up: ${fmtDist(openerM)}`};
+  $('chLabel').textContent = current.label;
+  $('chBar').style.width = '0%';
+  $('challengeBox').dataset.type = 'distance';
+  updateChallengeUI();
+  setSpinEnabled(false);
+}
+
+function finish(dnf){
+  if(finished) return;
+  finished = true; running = false;
+  releaseAwake();
+  stopGPS();
+  clearInterval(tickTimer);
+  const sec = (Date.now() - startT)/1000, km = totalDist/1000;
+  const run = {
+    id: String(Date.now()),
+    date: new Date().toISOString(),
+    km: Math.round(km*1000)/1000,
+    sec: Math.round(sec),
+    pace: km > 0.01 ? sec/km : null,
+    level: level,
+    dnf: !!dnf,
+    challenges: completed.slice(),
+    route: sampleRoute(route)
+  };
+  const runs = loadRuns();
+  run.trophies = newTrophies(runs, run);
+  runs.unshift(run);
+  if(!saveRuns(runs)) $('gpsStatus').textContent = 'Could not save this run in the browser.';
+  showRunDetail(run, true, 'setup');
+}
+
+function showRunDetail(run, isNew, from){
+  summaryBackTo = isNew ? 'setup' : (from || 'history');
+  currentDetail = run;
+  $('sumTitle').textContent = run.dnf ? 'DNF' : 'Run Complete!';
+  $('sumCheck').textContent = run.dnf ? '✕' : '✓';
+  $('sumCheck').style.background = run.dnf ? MUTED : RED;
+  $('sumDate').textContent = `${new Date(run.date).toLocaleString()} · ${levelName(run.level)}`;
+  const stats = [
+    [run.km.toFixed(2)+' km','Distance'],
+    [fmtTime(run.sec),'Time'],
+    [run.pace ? fmtPace(run.pace) + ' /km' : '--:--','Avg pace'],
+    [String(run.challenges.length),'Challenges']
+  ];
+  const sumStats = $('sumStats'); sumStats.innerHTML = '';
+  stats.forEach(([v,l]) => {
+    const d = document.createElement('div');
+    d.innerHTML = '<span></span><small></small>';
+    d.querySelector('span').textContent = v;
+    d.querySelector('small').textContent = l;
+    sumStats.appendChild(d);
+  });
+  const medalBox = $('sumMedal');
+  if(run.dnf){
+    medalBox.innerHTML = '<p class="note">No medal for a DNF. Start a new run to earn one.</p>';
+  } else {
+    medalBox.innerHTML = `<div class="medal-block"><div class="hex lg"></div><div><b>${levelName(run.level)} Finisher</b><small>Placeholder medal artwork</small></div></div>`;
+    medalBox.querySelector('.hex').textContent = medalCode(run.level);
+  }
+  $('sumTrophy').textContent = run.trophies && run.trophies.length ? 'Trophy unlocked: ' + run.trophies.join(', ') : '';
+  $('sumRoute').innerHTML = routeSVG(run.route);
+  const ul = $('sumList'); ul.innerHTML = '';
+  if(!run.challenges.length){
+    const li = document.createElement('li'); li.textContent = 'No challenges completed.'; ul.appendChild(li);
+  }
+  run.challenges.forEach(lbl => {
+    const li = document.createElement('li'); li.textContent = '✓ ' + lbl; ul.appendChild(li);
+  });
+  $('saveNote').textContent = '';
+  $('backBtn').textContent = isNew ? 'Done' : 'Back';
+  show('summary');
+}
+
+$('dnfBtn').onclick = () => {
+  if(!running) return;
+  $('dnfConfirm').classList.remove('hidden');
+  $('dnfBtn').classList.add('hidden');
+};
+$('dnfNo').onclick = () => {
+  $('dnfConfirm').classList.add('hidden');
+  $('dnfBtn').classList.remove('hidden');
+};
+$('dnfYes').onclick = () => { if(running) finish(true); };
+
+// ---------- Landing animation ----------
+function celebrate(){
+  if(REDUCED) return;
+  const hub = $('hub'), ring = $('ring');
+  hub.classList.remove('pop'); ring.classList.remove('go');
+  void hub.offsetWidth; // restart the animations
+  hub.classList.add('pop'); ring.classList.add('go');
+}
+
+// ---------- Story image (1080 x 1920, for Instagram and Facebook stories) ----------
+function makeStory(run){
+  const W = 1080, H = 1920, pad = 80;
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d');
+  g.fillStyle = INK; g.fillRect(0, 0, W, H);
+
+  g.fillStyle = WHITE; g.font = `800 120px ${FONT}`; g.textAlign = 'left';
+  g.fillText(run.dnf ? 'DNF' : 'Run Complete!', pad, 230);
+  g.fillStyle = MUTED; g.font = `600 42px ${FONT}`;
+  g.fillText(`${new Date(run.date).toLocaleDateString()} · ${levelName(run.level)}`, pad, 300);
+
+  const kmText = run.km.toFixed(2);
+  g.fillStyle = WHITE; g.font = `800 340px ${FONT}`;
+  g.fillText(kmText, pad - 10, 690);
+  const kmW = g.measureText(kmText).width;
+  g.fillStyle = MUTED; g.font = `600 80px ${FONT}`;
+  g.fillText('km', pad + kmW + 10, 690);
+  g.fillStyle = RED; g.fillRect(pad, 730, 420, 12);
+
+  const stats = [
+    [fmtTime(run.sec), 'Time'],
+    [run.pace ? fmtPace(run.pace) : '--:--', 'Avg /km'],
+    [String(run.challenges.length), 'Challenges']
+  ];
+  const colW = (W - 2*pad) / 3;
+  stats.forEach(([v, l], i) => {
+    const x = pad + i*colW;
+    g.fillStyle = WHITE; g.font = `800 76px ${FONT}`;
+    g.fillText(v, x, 880);
+    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
+    g.fillText(l, x, 935);
+  });
+
+  const rx = pad, ry = 1010, rw = W - 2*pad, rh = 600;
+  g.fillStyle = '#1f1f23'; g.fillRect(rx, ry, rw, rh);
+  if(run.route && run.route.length >= 2){
+    drawRouteCanvas(g, run.route, rx, ry, rw, rh);
+  } else {
+    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
+    g.fillText('No route recorded', rx + 40, ry + rh/2);
+  }
+
+  if(!run.dnf){
+    g.fillStyle = RED;
+    g.beginPath();
+    const cx = pad + 80, cy = 1740, r = 80;
+    for(let i = 0; i < 6; i++){
+      const a = Math.PI/3*i + Math.PI/6;
+      const px = cx + r*Math.cos(a), py = cy + r*Math.sin(a);
+      i ? g.lineTo(px, py) : g.moveTo(px, py);
+    }
+    g.closePath(); g.fill();
+    g.fillStyle = WHITE; g.font = `800 40px ${FONT}`; g.textAlign = 'center';
+    g.fillText(medalCode(run.level), cx, 1752);
+    g.textAlign = 'left';
+    g.fillStyle = WHITE; g.font = `800 50px ${FONT}`;
+    g.fillText(`${levelName(run.level)} Finisher`, pad + 200, 1732);
+    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
+    g.fillText('Placeholder medal artwork', pad + 200, 1790);
+  } else {
+    g.fillStyle = MUTED; g.font = `600 40px ${FONT}`;
+    g.fillText('No medal for a DNF', pad, 1748);
+  }
+
+  g.fillStyle = MUTED; g.font = `600 34px ${FONT}`; g.textAlign = 'left';
+  g.fillText('SPIN-A-RUN', pad, 1860);
+  return c;
+}
+async function saveStory(run){
+  if(!run) return;
+  const note = $('saveNote');
+  note.textContent = '';
+  const blob = await new Promise(res => makeStory(run).toBlob(res, 'image/png'));
+  if(!blob){ note.textContent = 'Could not create the image.'; return; }
+  const filename = `spin-run-${run.dnf ? 'dnf' : 'run'}-${run.id}.png`;
+  // The published page saves through the viewer's downloads permission, which asks them to confirm
+  let dl = null;
+  try {
+    dl = (typeof claude !== 'undefined' && claude.use) ? await claude.use('downloads') : null;
+  } catch(e) { dl = null; }
+  if(!dl){
+    note.textContent = 'Saving images isn\u2019t available in this view. Use Share instead, or open the page in a browser.';
+    return;
+  }
+  try {
+    await dl.save({filename, data: blob});
+    note.textContent = 'Image saved at 1080 × 1920, the story size for Instagram and Facebook.';
+  } catch(err) {
+    if(err && err.code === 'declined') note.textContent = 'Save cancelled.';
+    else note.textContent = 'Could not save the image here. Try Share instead.';
+  }
+}
+$('saveBtn').onclick = () => saveStory(currentDetail);
+
+// ---------- Share: image through the phone's share sheet, text-only as a fallback ----------
+async function shareRun(run){
+  const note = $('saveNote');
+  note.textContent = '';
+  const title = run.dnf ? 'SPIN-A-RUN DNF' : 'SPIN-A-RUN: run completed';
+  const text = `${run.km.toFixed(2)} km in ${fmtTime(run.sec)} on SPIN-A-RUN`;
+  try {
+    const blob = await new Promise(res => makeStory(run).toBlob(res, 'image/png'));
+    const file = new File([blob], `spin-run-${run.id}.png`, {type: 'image/png'});
+    if(navigator.canShare && navigator.canShare({files: [file]})){
+      await navigator.share({files: [file], title, text});
+      return;
+    }
+    if(navigator.share){
+      await navigator.share({title, text});
+      note.textContent = 'Shared the summary.';
+      return;
+    }
+    note.textContent = 'Sharing isn\u2019t supported in this browser. Use Save image instead.';
+  } catch(e) {
+    if(e && e.name !== 'AbortError') note.textContent = 'Could not share. Use Save image instead.';
+  }
+}
+$('shareBtn').onclick = () => { if(currentDetail) shareRun(currentDetail); };
+
+function tick(){
+  if(!running) return;
+  const el = (Date.now() - startT)/1000, km = totalDist/1000;
+  $('sTime').textContent = fmtTime(el);
+  $('sDist').textContent = km.toFixed(2);
+  $('sPace').textContent = km > 0.01 ? fmtPace(el/km) : '--:--';
+  const v = speedNow();
+  $('sSpeed').textContent = v > 0.3 ? fmtPace(1000/v) : '--:--';
+}
+
+// ---------- GPS ----------
+function startGPS(){
+  if(!navigator.geolocation){
+    $('gpsStatus').textContent = 'GPS not available in this browser. Use Simulate.';
+    return;
+  }
+  $('gpsStatus').textContent = 'Waiting for GPS fix...';
+  watchId = navigator.geolocation.watchPosition(
+    p => { $('gpsStatus').textContent = 'GPS on'; onFix(p.coords.latitude, p.coords.longitude, p.coords.accuracy, Date.now()); },
+    e => {
+      $('gpsStatus').textContent = gpsErrorText(e);
+      if(e.code === 1) stopGPS(); // permission denied: retrying won't help
+    },
+    { enableHighAccuracy:true, maximumAge:0, timeout:15000 }
+  );
+}
+function gpsErrorText(e){
+  if(e.code === 1) return 'Location access is blocked for this page. Allow location in your browser or phone settings and reload, or use Simulate.';
+  if(e.code === 2) return 'Your phone can\u2019t get a GPS position right now. Try outdoors with a clear view of the sky, or use Simulate.';
+  if(e.code === 3) return 'GPS is taking a while. Still trying. Move outdoors if you can, or use Simulate.';
+  return 'GPS isn\u2019t working. Use Simulate to keep testing.';
+}
+function startSim(){
+  $('gpsStatus').textContent = 'Simulated GPS (no real location)';
+  simTimer = setInterval(() => {
+    simSpeed = Math.max(1.5, Math.min(5, simSpeed + (Math.random() - 0.5)));
+    simLat += simSpeed / 111320;
+    onFix(simLat, simLon, 5, Date.now());
+  }, 1000);
+}
+function stopGPS(){
+  if(watchId !== null){ navigator.geolocation.clearWatch(watchId); watchId = null; }
+  if(simTimer){ clearInterval(simTimer); simTimer = null; }
+}
+
+function onFix(lat, lon, acc, t){
+  if(!running || finished) return;
+  if(acc > 25) return;
+  if(!last){
+    last = {lat, lon, t};
+    route.push({lat, lon});
+    return;
+  }
+  const dt = (t - last.t)/1000;
+  if(dt <= 0) return;
+  const d = haversine(last.lat, last.lon, lat, lon);
+  if(d < 2) return;
+  if(d/dt > 12) return;
+  totalDist += d;
+  recent.push({d, dt, t});
+  recent = recent.filter(r => t - r.t <= 8000);
+  last = {lat, lon, t};
+  route.push({lat, lon});
+  advanceChallenge(d);
+}
+
+// ---------- Challenges ----------
+function advanceChallenge(d){
+  if(!current) return;
+  current.progress += d;
+  updateChallengeUI();
+  if(current.progress >= current.target) completeChallenge();
+}
+function updateChallengeUI(){
+  if(!current) return;
+  const pct = Math.min(100, current.progress / current.target * 100);
+  $('chBar').style.width = pct + '%';
+  $('chProgress').textContent = current.final
+    ? 'FINISH 🏁'
+    : `${fmtDist(Math.floor(current.progress))} of ${fmtDist(current.target)}`;
+}
+
+function completeChallenge(){
+  if(current.next){
+    // Penalty done: the run ends here
+    completed.push(current.label);
+    $('warn').classList.add('hidden');
+    alertNeedSpin();
+    finish(false);
+    return;
+  }
+  completed.push(current.label);
+  const wasFinal = !!current.final;
+  current = null;
+  $('chBar').style.width = '100%';
+  $('challengeBox').dataset.type = 'done';
+  alertNeedSpin();
+  if(wasFinal){
+    $('chLabel').textContent = 'Finish complete 🏁';
+    $('chProgress').textContent = '';
+    finish(false);
+    return;
+  }
+  $('chLabel').textContent = 'Challenge complete';
+  $('chProgress').textContent = 'Spin for your next challenge';
+  setSpinEnabled(true);
+}
+
+// A placement on the finish slice gets a warning and a 5 km penalty before the finish run
+function startPenalty(){
+  const finalChallenge = {type:'distance', target:FINAL_M, progress:0, label:'1 km FINISH 🏁', final:true};
+  current = {type:'distance', target:5000, progress:0, label:'Penalty: 5 km', next: finalChallenge};
+  $('chLabel').textContent = current.label;
+  $('chBar').style.width = '0%';
+  $('challengeBox').dataset.type = 'distance';
+  $('warn').textContent = 'Warning: you placed the wheel on FINISH. Penalty: run 5 km first, then finish.';
+  $('warn').classList.remove('hidden');
+  if(navigator.vibrate) navigator.vibrate([400, 150, 400]);
+  updateChallengeUI();
+  setSpinEnabled(false);
+}
+
+function onLand(idx, manual = false){
+  const s = slices[idx];
+  if(manual && s.type === 'final'){ startPenalty(); return; }
+  if(s.type === 'final'){ celebrate(); alertNeedSpin(); finish(false); return; }
+  current = {...s.c, progress: 0};
+  $('chLabel').textContent = current.label;
+  $('chBar').style.width = '0%';
+  $('challengeBox').dataset.type = current.final ? 'final' : 'distance';
+  celebrate();
+  updateChallengeUI();
+  setSpinEnabled(false);
+}
+
+// ---------- Wheel ----------
+function shuffle(a){
+  for(let i = a.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function buildWheel(){
+  // Normal slices come from the chosen level's distances. The finish slice is
+  // smaller (lower weight), so it lands less often.
+  const pool = LEVELS[level].dists;
+  const normals = Array.from({length: NORMAL_SLICES}, () => ({
+    type: 'challenge', w: 1, c: mkDist(pool[Math.floor(Math.random()*pool.length)])
+  }));
+  const finish = {
+    type: 'final', w: FINAL_WEIGHT,
+    c: {type:'distance', target:FINAL_M, short:'1 km FINISH', label:'1 km FINISH 🏁', final:true}
+  };
+  slices = shuffle([...normals, finish]);
+}
+function sliceArcs(){
+  const total = slices.reduce((a, s) => a + s.w, 0);
+  let acc = 0;
+  return slices.map(s => {
+    const arc = 2*Math.PI*s.w/total;
+    const start = acc; acc += arc;
+    return {start, arc};
+  });
+}
+function drawWheel(){
+  const canvas = $('wheel'), ctx = canvas.getContext('2d');
+  const W = canvas.width, cx = W/2, cy = W/2, r = W/2 - 26;
+  ctx.clearRect(0, 0, W, W);
+
+  // White rim with tick marks
+  ctx.beginPath(); ctx.arc(cx, cy, W/2 - 8, 0, 2*Math.PI);
+  ctx.strokeStyle = WHITE; ctx.lineWidth = 8; ctx.stroke();
+  for(let i = 0; i < 60; i++){
+    const a = angle + i*(2*Math.PI/60);
+    const inner = i % 5 === 0 ? r + 6 : r + 14;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a)*inner, cy + Math.sin(a)*inner);
+    ctx.lineTo(cx + Math.cos(a)*(W/2 - 16), cy + Math.sin(a)*(W/2 - 16));
+    ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = i % 5 === 0 ? 3 : 1.5; ctx.stroke();
+  }
+
+  const A = sliceArcs();
+  slices.forEach((sl, i) => {
+    const a0 = angle + A[i].start, a1 = a0 + A[i].arc;
+    const isFinal = sl.type === 'final';
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
+    ctx.fillStyle = isFinal ? RED : SLICE; ctx.fill();
+    ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.stroke();
+    ctx.save();
+    ctx.translate(cx, cy); ctx.rotate(a0 + A[i].arc/2);
+    ctx.fillStyle = WHITE;
+    ctx.font = `800 ${isFinal ? 30 : 42}px ${FONT}`;
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText(isFinal ? 'FINISH 🏁' : sl.c.short, r - 26, 0);
+    ctx.restore();
+  });
+
+  ctx.beginPath(); ctx.arc(cx, cy, 34, 0, 2*Math.PI);
+  ctx.fillStyle = INK; ctx.fill();
+  ctx.strokeStyle = WHITE; ctx.lineWidth = 6; ctx.stroke();
+
+  updateHub();
+}
+
+// Shows the distance of the slice under the needle: live while spinning, final when it lands
+function updateHub(){
+  if(!slices.length) return;
+  const val = $('hubValue'), lab = $('hubLabel'), hub = $('hub');
+  const A = sliceArcs(), needle = -Math.PI/2;
+  let under = -1;
+  A.forEach((a, i) => {
+    const rel = (((needle - angle - a.start) % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+    if(rel < a.arc) under = i;
+  });
+  if(under < 0) return;
+  const sl = slices[under];
+  if(sl.type === 'final'){
+    val.textContent = '🏁';
+    lab.textContent = '';
+    hub.classList.add('final');
+  } else {
+    val.textContent = fmtDist(sl.c.target);
+    lab.textContent = spinning ? 'spinning' : '';
+    hub.classList.remove('final');
+  }
+}
+
+function setSpinEnabled(on){
+  $('spinBtn').disabled = !on || spinning;
+}
+function spin(){
+  if(spinning || current || !running || !slices.length) return;
+  spinning = true; setSpinEnabled(false);
+  const A = sliceArcs();
+  const total = slices.reduce((a, s) => a + s.w, 0);
+  const pick = Math.random() * total;
+  let acc = 0, idx = slices.length - 1;
+  for(let i = 0; i < slices.length; i++){
+    acc += slices[i].w;
+    if(pick < acc){ idx = i; break; }
+  }
+  const center = A[idx].start + A[idx].arc/2;
+  const base = -Math.PI/2 - center;
+  const norm = ((base - angle) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  const from = angle, to = angle + norm + (REDUCED ? 1 : 5)*2*Math.PI;
+  const t0 = performance.now(), dur = REDUCED ? 600 : 3500;
+  function frame(now){
+    const p = Math.min(1, (now - t0)/dur);
+    const e = 1 - Math.pow(1 - p, 3);
+    angle = from + (to - from)*e;
+    drawWheel();
+    if(p < 1) requestAnimationFrame(frame);
+    else { spinning = false; drawWheel(); onLand(idx); }
+  }
+  requestAnimationFrame(frame);
+}
+
+// ---------- Swipe to spin ----------
+// Drag around the wheel and let go: a fast flick spins it, slows down, and lands on the slice under the needle.
+function canSpin(){ return !spinning && !current && running && slices.length > 0; }
+function sliceUnderNeedle(){
+  const A = sliceArcs(), needle = -Math.PI/2;
+  let idx = -1;
+  A.forEach((a, i) => {
+    const rel = (((needle - angle - a.start) % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+    if(rel < a.arc) idx = i;
+  });
+  return idx;
+}
+let drag = null;
+const wheelCanvas = $('wheel');
+wheelCanvas.addEventListener('pointerdown', e => {
+  if(!canSpin()) return;
+  const rect = wheelCanvas.getBoundingClientRect();
+  const c = {x: rect.left + rect.width/2, y: rect.top + rect.height/2};
+  drag = {c, lastA: Math.atan2(e.clientY - c.y, e.clientX - c.x), samples: [{t: performance.now(), a: angle}]};
+  spinning = true; setSpinEnabled(false);
+  wheelCanvas.setPointerCapture(e.pointerId);
+});
+wheelCanvas.addEventListener('pointermove', e => {
+  if(!drag) return;
+  const a = Math.atan2(e.clientY - drag.c.y, e.clientX - drag.c.x);
+  let d = a - drag.lastA;
+  if(d > Math.PI) d -= 2*Math.PI;
+  if(d < -Math.PI) d += 2*Math.PI;
+  angle += d; drag.lastA = a;
+  drag.samples.push({t: performance.now(), a: angle});
+  if(drag.samples.length > 12) drag.samples.shift();
+  drawWheel();
+});
+function endDrag(){
+  if(!drag) return;
+  const now = performance.now();
+  const recent = drag.samples.filter(p => now - p.t <= 120);
+  let v = 0;
+  if(recent.length >= 2){
+    const first = recent[0], last = recent[recent.length-1];
+    v = (last.a - first.a) / Math.max(1, last.t - first.t) * 1000; // radians per second
+  }
+  drag = null;
+  if(Math.abs(v) < 2){
+    // Slow release: only a deliberate placement on the finish slice gets the penalty
+    const under = sliceUnderNeedle();
+    if(under >= 0 && slices[under].type === 'final'){ settle(true); return; }
+    spinning = false; setSpinEnabled(true); return;
+  }
+  flick(Math.max(-30, Math.min(30, v)));
+}
+wheelCanvas.addEventListener('pointerup', endDrag);
+wheelCanvas.addEventListener('pointercancel', endDrag);
+
+function flick(v){
+  let last = performance.now();
+  function step(now){
+    const dt = Math.min(0.05, (now - last)/1000);
+    last = now;
+    angle += v*dt;
+    v *= Math.exp(-2.5*dt); // friction slows the wheel
+    drawWheel();
+    if(Math.abs(v) > 0.4) requestAnimationFrame(step);
+    else settle();
+  }
+  requestAnimationFrame(step);
+}
+// Snap to the slice under the needle, then land on it
+function settle(manual = false){
+  const A = sliceArcs(), needle = -Math.PI/2;
+  let idx = 0;
+  A.forEach((a, i) => {
+    const rel = (((needle - angle - a.start) % (2*Math.PI)) + 2*Math.PI) % (2*Math.PI);
+    if(rel < a.arc) idx = i;
+  });
+  const center = A[idx].start + A[idx].arc/2;
+  const norm = ((-Math.PI/2 - center - angle) % (2*Math.PI) + 2*Math.PI) % (2*Math.PI);
+  const from = angle, to = angle + norm, t0 = performance.now(), dur = 400;
+  function frame(now){
+    const p = Math.min(1, (now - t0)/dur);
+    const e = 1 - Math.pow(1 - p, 3);
+    angle = from + (to - from)*e;
+    drawWheel();
+    if(p < 1) requestAnimationFrame(frame);
+    else { spinning = false; drawWheel(); onLand(idx, manual); }
+  }
+  requestAnimationFrame(frame);
+}
+
+$('spinBtn').onclick = () => {
+  if(!spinning && !current && running){
+    buildWheel();
+    drawWheel();
+    spin();
+  }
+};
+show('setup');
+drawWheel();
+// Title page for 2 seconds, then the main menu
+setTimeout(() => {
+  $('splash').classList.add('out');
+  setTimeout(() => $('splash').classList.add('hidden'), 450);
+}, 2000);
+</script>
+</body>
+</html>
