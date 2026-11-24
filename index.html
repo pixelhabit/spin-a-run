@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#151517">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SPIN-A-RUN">
 <title>SPIN-A-RUN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -229,7 +235,13 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
 .brand .alpha{align-self:flex-start;margin-top:4px}
 #warmToggle{display:none!important}
 .red{color:var(--red)}
-.tutorial{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 16px) 22px calc(env(safe-area-inset-bottom,0px) + 22px);background:radial-gradient(120% 50% at 50% -6%,rgba(229,57,53,.24),transparent 62%),linear-gradient(180deg,#1b1b1f,#0e0e10)}
+.tutorial{position:fixed;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(0,0,0,.72);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.tut-card{position:relative;display:flex;flex-direction:column;width:min(400px,100%);height:min(680px,100%);overflow:hidden;padding:12px 18px 18px;border-radius:26px;border:1px solid rgba(255,255,255,.1);background:radial-gradient(120% 45% at 50% -6%,rgba(229,57,53,.26),transparent 62%),linear-gradient(180deg,#1d1d21,#0f0f11);box-shadow:0 24px 60px rgba(0,0,0,.65);animation:popin .22s ease-out}
+.tut-card .tut-skip{padding:6px 4px}
+.tut-card .tut-hero{height:min(200px,24vh)}
+.tut-card .tut-h{font-size:36px}
+.tut-card .tut-text{font-size:16px}
+.tut-card .tut-slide{overflow-y:auto}
 .tutorial.hidden{display:none!important}
 .tut-skip{align-self:flex-end;color:var(--muted);font-weight:600;font-size:15px;padding:8px}
 .tut-viewport{flex:1;overflow:hidden;position:relative;touch-action:pan-y;max-width:440px;width:100%;margin:0 auto}
@@ -249,36 +261,57 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
 .tut-dots span.on{background:var(--red)}
 .tut-nav{display:grid;grid-template-columns:1fr 1.4fr;gap:12px;max-width:440px;width:100%;margin:0 auto}
 .tut-nav button{padding:16px}
+.tut-slide{justify-content:flex-start;gap:14px;padding-top:2px}
+.tut-hero{position:relative;height:min(250px,31vh);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tut-sun{position:absolute;width:min(230px,58vw);height:min(230px,58vw);border-radius:50%;left:50%;top:46%;transform:translate(-50%,-50%);background:radial-gradient(circle at 50% 38%,#ff3b30,#c62828 62%,rgba(198,40,40,.3))}
+.tut-mtn{position:absolute;left:-30px;width:calc(100% + 60px);bottom:0;height:64px}
+.tut-hero svg.g{position:relative;z-index:2;height:100%;width:auto;max-width:100%;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+.tut-h{font-size:42px;line-height:1.04;margin:2px 0 0}
+.slash{display:inline-block;background:linear-gradient(135deg,#ff5a4f,#d32f2f);padding:0 16px;transform:skew(-9deg);box-shadow:0 6px 18px rgba(229,57,53,.35)}
+.swoosh{height:6px;width:62%;margin:-4px auto 0;border-radius:3px;background:linear-gradient(90deg,transparent,#e53935 18%,#ff5a4f);transform:rotate(-2deg)}
+.tut-pad{align-self:center;margin-top:2px}
+.tut-flow{display:flex;flex-direction:column;align-items:center;gap:4px;border:1.5px solid rgba(229,57,53,.6);border-radius:14px;padding:10px;background:rgba(229,57,53,.06)}
+.tut-row{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:15px}
+.tut-row i{font-style:normal;color:var(--muted)}
 </style>
 </head>
 <body>
 
-<div id="tutorial" class="tutorial hidden">
+<div id="tutorial" class="tutorial hidden"><div class="tut-card">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="wheelGfx" viewBox="0 0 200 200">
+    <circle cx="100" cy="108" r="86" fill="#101012" stroke="#fff" stroke-width="5"/>
+    <path d="M100 108L15.3 93.1A86 86 0 0 0 15.3 122.9Z" fill="#e53935" stroke="#fff" stroke-width="3"/>
+    <g stroke="#fff" stroke-width="3"><path d="M100 108L186 108M100 108L143 182.5M100 108L57 182.5M100 108L57 33.5M100 108L143 33.5"/></g>
+    <circle cx="100" cy="108" r="27" fill="#101012" stroke="#fff" stroke-width="4"/>
+    <g transform="translate(88 96)" stroke="#fff" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4" r="2.2" fill="#fff"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></g>
+    <path d="M87 2H113L100 34Z" fill="#fff"/></symbol></svg>
   <button id="tutSkip" class="tut-skip">Skip</button>
-  <div class="tut-viewport" id="tutViewport">
-    <div class="tut-track" id="tutTrack">
-      <section class="tut-slide">
-        <p class="tut-kicker">SPIN-A-RUN</p>
-        <h2 class="tut-h" style="font-size:34px">The Game</h2>
-        <span class="tut-pill">The goal</span>
-        <p class="tut-text">Keep running through random distances until your spin lands on <b class="red">FINISH!</b></p>
-        <p class="tut-text" style="color:var(--muted);font-size:16px">A simple game that turns running into a challenge of chance, endurance, and a little luck.</p>
-      </section>
-      <section class="tut-slide">
-        <h2 class="tut-h">How it works</h2>
-        <div class="tut-step"><span class="num">1</span><div><b>SPIN</b><p>Spin the wheel to get your next running distance.</p></div></div>
-        <div class="tut-step"><span class="num">2</span><div><b>RUN</b><p>Run the distance you got.</p></div></div>
-        <div class="tut-step"><span class="num">3</span><div><b>REPEAT</b><p>Spin again and keep running until you land on <b class="red">FINISH!</b></p></div></div>
-      </section>
-      <section class="tut-slide">
-        <h2 class="tut-h">Land on <span class="red">FINISH!</span></h2>
-        <p class="tut-text">The game ends when your spin finally lands on <b class="red">FINISH</b>.</p>
-      </section>
-    </div>
-  </div>
-  <div class="tut-dots"><span class="on"></span><span></span><span></span></div>
+  <div class="tut-viewport" id="tutViewport"><div class="tut-track" id="tutTrack">
+    <section class="tut-slide">
+      <div class="tut-hero"><svg class="tut-mtn" viewBox="0 0 400 90" preserveAspectRatio="none"><path d="M0 90L40 48 80 70 130 25 180 62 230 35 285 68 335 40 400 66V90Z" fill="#232328"/></svg><svg class="g" viewBox="0 0 200 200"><use href="#wheelGfx"/></svg></div>
+      <h2 class="tut-h">Let chance<br><span class="slash">Decide.</span></h2>
+      <p class="tut-text">No route. No plan. Just a roulette wheel and whatever challenge it throws your way.</p>
+    </section>
+    <section class="tut-slide">
+      <div class="tut-hero"><svg class="tut-mtn" viewBox="0 0 400 90" preserveAspectRatio="none"><path d="M0 90L40 48 80 70 130 25 180 62 230 35 285 68 335 40 400 66V90Z" fill="#232328"/></svg><svg class="g" viewBox="0 0 200 200"><use href="#wheelGfx"/></svg></div>
+      <h2 class="tut-h"><span class="slash">Spin</span><br>the wheel.</h2>
+      <p class="tut-text">Tap spin and let the roulette decide your next move. Whatever it lands on, that’s your challenge.</p>
+    </section>
+    <section class="tut-slide">
+      <div class="tut-hero"><div class="tut-sun"></div><svg class="tut-mtn" viewBox="0 0 400 90" preserveAspectRatio="none"><path d="M0 90L40 48 80 70 130 25 180 62 230 35 285 68 335 40 400 66V90Z" fill="#232328"/></svg><svg class="g" viewBox="0 0 200 160"><path d="M14 70H66M4 88H58M20 106H62" stroke="#fff" stroke-width="5" stroke-linecap="round"/><g transform="translate(62 14) scale(5)" stroke="#fff" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="4" r="2.2" fill="#fff"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></g></svg></div>
+      <h2 class="tut-h">Play one challenge at a time.</h2><div class="swoosh"></div>
+      <p class="tut-text">Run the distance on the wheel. When you’re done, spin again. You never know what’s coming next.</p>
+    </section>
+    <section class="tut-slide">
+      <div class="tut-hero"><div class="tut-sun"></div><svg class="tut-mtn" viewBox="0 0 400 90" preserveAspectRatio="none"><path d="M0 90L40 48 80 70 130 25 180 62 230 35 285 68 335 40 400 66V90Z" fill="#232328"/></svg><svg class="g" viewBox="0 0 200 160"><defs><pattern id="chk" width="32" height="32" patternUnits="userSpaceOnUse"><rect width="32" height="32" fill="#0e0e10"/><rect width="16" height="16" fill="#fff"/><rect x="16" y="16" width="16" height="16" fill="#fff"/></pattern></defs><path d="M52 152L62 16" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M64 24Q100 6 134 24T198 24L192 76Q160 94 128 76T58 76Z" fill="url(#chk)" stroke="#fff" stroke-width="2"/></svg></div>
+      <h2 class="tut-h">Keep going.<br>Or call it.</h2><div class="swoosh"></div>
+      <p class="tut-text">Keep running and spinning until the roulette stops on <b class="red">FINISH</b>. Or DNF. It’s your game. Your call.</p>
+      <div class="tut-flow"><svg viewBox="0 0 60 30" width="48"><path d="M30 15c-4-8-10-10-15-10C8 5 4 9 4 15s4 10 11 10c5 0 11-2 15-10 4 8 10 10 15 10 7 0 11-4 11-10S52 5 45 5c-5 0-11 2-15 10z" fill="none" stroke="#e53935" stroke-width="4"/></svg><div class="tut-row"><b>Spin</b><i>›</i><b>Run</b><i>›</i><b>Repeat</b></div></div>
+    </section>
+  </div></div>
+  <div class="tut-dots"><span class="on"></span><span></span><span></span><span></span></div>
   <div class="tut-nav"><button id="tutBack" class="ghost">Back</button><button id="tutNext" class="primary">Next</button></div>
-</div>
+</div></div>
 
 <div id="splash" class="splash">
   <svg width="180" height="180" viewBox="0 0 1254 1254" aria-hidden="true"><path d="M142 137 L107 177 L83 217 L67 258 L59 303 L59 944 L64 979 L81 1032 L102 1072 L130 1109 L152 1131 L173 1148 L217 1174 L258 1188 L301 1194 L965 1193 L1002 1186 L1033 1175 L1065 1158 L1099 1133 L1132 1099 L1162 1055 L1172 1035 L1186 995 L1194 945 L1193 297 L1184 255 L1170 219 L1146 178 L1114 140 L1084 114 L1035 86 L983 69 L945 64 L303 64 L277 67 L252 73 L217 86 L172 112 Z" fill="#000000"/><path d="M589 565 L577 574 L548 608 L547 617 L551 622 L555 624 L563 622 L594 590 L623 593 L624 596 L572 681 L567 686 L511 712 L507 717 L506 723 L512 732 L522 733 L577 711 L588 704 L613 671 L618 669 L658 693 L656 701 L630 759 L631 766 L634 770 L638 772 L645 772 L651 767 L687 694 L687 684 L684 679 L639 646 L660 615 L679 635 L686 639 L691 639 L741 615 L745 610 L746 604 L741 596 L732 594 L691 612 L666 583 L651 572 L640 569 Z M670 517 L661 521 L654 528 L650 536 L649 548 L653 559 L661 567 L670 571 L681 571 L691 567 L700 558 L703 551 L703 537 L700 530 L691 521 L682 517 Z M521 253 L483 266 L439 287 L417 300 L390 319 L365 340 L339 366 L305 408 L282 444 L262 483 L244 532 L235 572 L231 604 L230 649 L233 686 L239 720 L247 751 L259 785 L282 833 L309 875 L328 899 L367 940 L387 957 L421 981 L450 998 L479 1012 L515 1025 L548 1033 L586 1039 L613 1041 L665 1039 L700 1033 L751 1018 L780 1006 L813 989 L843 970 L878 943 L909 913 L937 880 L960 846 L978 813 L994 775 L1004 743 L1012 705 L1017 657 L1017 620 L1013 579 L1003 532 L980 468 L965 439 L946 409 L903 357 L864 322 L827 296 L808 285 L755 261 L699 245 L692 244 L685 261 L686 263 L718 270 L748 280 L779 293 L820 316 L816 325 L718 481 L715 483 L701 475 L675 465 L636 458 L612 458 L590 461 L570 466 L535 481 L469 377 L432 314 L454 301 L496 282 L537 269 L568 263 L561 244 Z M813 965 L772 988 L740 1001 L702 1012 L648 1020 L592 1019 L535 1009 L487 993 L454 977 L436 966 L538 805 L560 815 L588 823 L608 826 L640 826 L675 819 L711 803 L720 814 Z M445 689 L458 722 L475 750 L501 779 L523 796 L422 956 L420 956 L381 926 L352 897 L320 857 L301 827 L283 792 L266 746 L283 739 Z M994 651 L996 653 L995 678 L985 734 L972 776 L951 821 L929 856 L897 896 L861 931 L828 955 L739 815 L727 793 L754 770 L768 753 L782 731 L796 699 L803 670 L804 653 L806 651 Z M254 583 L262 583 L437 624 L441 627 L440 659 L442 673 L263 729 L261 727 L256 706 L250 658 L250 619 Z M611 475 L644 476 L681 485 L706 497 L733 517 L757 544 L776 578 L784 603 L788 632 L786 668 L778 698 L767 722 L748 750 L721 776 L692 794 L665 804 L638 809 L609 809 L574 802 L546 790 L518 771 L498 751 L477 721 L461 683 L456 656 L457 622 L463 596 L477 564 L496 536 L519 513 L543 496 L578 481 Z M836 327 L863 347 L899 382 L929 420 L953 460 L972 502 L986 548 L995 597 L995 634 L806 634 L804 632 L803 613 L798 590 L783 553 L762 522 L751 510 L731 493 L797 386 Z M417 324 L520 490 L506 501 L487 520 L468 546 L452 578 L444 607 L439 608 L259 566 L257 564 L272 511 L283 485 L309 437 L332 405 L353 380 L381 352 Z M566 174 L558 180 L555 189 L556 194 L619 335 L624 339 L629 339 L635 333 L661 272 L698 192 L697 183 L692 176 L685 173 Z" fill="#ffffff" fill-rule="evenodd"/><path d="M255 583 L251 623 L251 653 L255 692 L263 728 L356 698 L441 673 L438 647 L439 626 Z" fill="#e51e14" fill-rule="evenodd"/></svg>
@@ -650,13 +683,13 @@ $('customBack').onclick = () => show('setup');
 
 // ---------- Swipeable how-to-play ----------
 let tutIndex = 0;
-const TUT_LAST = 2;
+const TUT_LAST = 3;
 function tutGo(i){
   tutIndex = Math.max(0, Math.min(TUT_LAST, i));
   $('tutTrack').style.transform = `translateX(${-tutIndex*100}%)`;
   document.querySelectorAll('.tut-dots span').forEach((d, k) => d.classList.toggle('on', k === tutIndex));
   $('tutBack').disabled = tutIndex === 0;
-  $('tutNext').textContent = tutIndex === TUT_LAST ? "Let’s Go!" : 'Next';
+  $('tutNext').textContent = tutIndex === TUT_LAST ? "Let’s Play!" : 'Next';
 }
 function openTutorial(){ tutGo(0); $('tutorial').classList.remove('hidden'); }
 function closeTutorial(){
@@ -668,6 +701,7 @@ function maybeTutorial(){
   openTutorial();
 }
 $('tutSkip').onclick = closeTutorial;
+$('tutorial').addEventListener('click', e => { if(e.target === $('tutorial')) closeTutorial(); });
 $('tutBack').onclick = () => tutGo(tutIndex - 1);
 $('tutNext').onclick = () => { if(tutIndex < TUT_LAST) tutGo(tutIndex + 1); else closeTutorial(); };
 $('howToBtn').onclick = openTutorial;
