@@ -285,6 +285,110 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
 .trophy-row div{display:flex;flex-direction:column;align-items:center;gap:6px}
 .trophy-row .trophy-img{width:96px;height:96px}
 .trophy-row b{font-size:14px}
+
+/* ===== Design refresh ===== */
+h1,.done-head h2{font-family:'Racing Sans One',var(--font);font-weight:400;text-transform:uppercase;letter-spacing:.01em}
+h1{font-size:42px;line-height:1}
+.brand-name{white-space:nowrap}
+.brand .brand-name{font-size:34px}
+.section-title{display:flex;align-items:center;gap:8px}
+.count{font-size:12px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.07);border-radius:999px;padding:3px 9px}
+
+/* Level cards: intensity bars */
+.card .ic.lvl{display:flex;align-items:flex-end;gap:3px;padding:10px 9px;border-radius:12px;background:rgba(255,255,255,.06)}
+.lvl i{flex:1;border-radius:2px;background:rgba(255,255,255,.16)}
+.lvl i:nth-child(1){height:32%}.lvl i:nth-child(2){height:56%}.lvl i:nth-child(3){height:78%}.lvl i:nth-child(4){height:100%}
+.lvl[data-n="1"] i:nth-child(-n+1),.lvl[data-n="2"] i:nth-child(-n+2),.lvl[data-n="3"] i:nth-child(-n+3),.lvl[data-n="4"] i:nth-child(-n+4){background:linear-gradient(180deg,#ff6a5e,#e53935)}
+.card .ic.box{border-radius:12px;background:rgba(255,255,255,.06)}
+.card .ic.box svg{width:24px;height:24px}
+.card.sel .ic{background:rgba(229,57,53,.2)}
+.card .chev{transition:transform .2s}
+.card.sel .chev{color:#fff;transform:translateX(2px)}
+
+/* Wheel pointer */
+.wheel-wrap::before{display:none}
+.pointer{position:absolute;top:-12px;left:50%;width:34px;height:48px;transform:translateX(-50%);z-index:4;filter:drop-shadow(0 4px 5px rgba(0,0,0,.6));pointer-events:none}
+#screen-run.ready .pointer{display:none}
+.hub{width:36%;height:36%;border:3px solid rgba(255,255,255,.9)}
+.hub-value{font-size:28px}
+
+/* START circle pulse */
+.startcircle::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:3px solid rgba(229,57,53,.65);animation:pulse 1.8s ease-out infinite;pointer-events:none}
+@keyframes pulse{from{transform:scale(.95);opacity:1}to{transform:scale(1.12);opacity:0}}
+.ready-hint{display:none;margin:0;text-align:center;font-size:14px;line-height:1.45;color:var(--muted);padding:0 12px}
+#screen-run.ready .ready-hint{display:block}
+
+/* Spin button states */
+#spinBtn:disabled{opacity:1;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);color:var(--muted);font-size:16px;font-weight:600}
+#spinBtn.glow{animation:glow 1.6s ease-in-out infinite}
+@keyframes glow{0%,100%{box-shadow:0 8px 22px rgba(229,57,53,.35),inset 0 1px 0 rgba(255,255,255,.25)}50%{box-shadow:0 8px 34px rgba(229,57,53,.7),inset 0 1px 0 rgba(255,255,255,.25)}}
+
+/* Status pills */
+.status-row{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#d6d6dc;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:6px 11px;line-height:1.35}
+.pill i{flex-shrink:0;width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.pill[data-state="ok"] i{background:#34c759;box-shadow:0 0 8px rgba(52,199,89,.8)}
+.pill[data-state="wait"] i{background:#ffb020;box-shadow:0 0 8px rgba(255,176,32,.7)}
+.pill[data-state="bad"] i{background:var(--red);box-shadow:0 0 8px rgba(229,57,53,.8)}
+
+/* Tracking paused notice */
+.pause{display:flex;flex-direction:column;gap:6px;border:1.5px solid rgba(255,176,32,.55);background:rgba(255,176,32,.1);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
+.pause b{color:#ffb020;font-size:15px}
+.pause button{align-self:flex-end;font-size:14px;font-weight:700;color:#ffb020;padding:2px 0}
+.pause-note{margin:0;border:1px solid rgba(255,176,32,.45);background:rgba(255,176,32,.08);border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45;color:#e8e8ee}
+
+/* Summary */
+.done-head h2{font-size:40px}
+.hero-km{display:flex;align-items:baseline;justify-content:center;gap:8px;margin:-4px 0 -6px;font-variant-numeric:tabular-nums}
+.hero-km span{font-size:80px;font-weight:800;line-height:1;letter-spacing:-.04em;background:linear-gradient(180deg,#fff 25%,#b4b4be);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.hero-km small{font-size:24px;font-weight:600;color:var(--muted)}
+.stats3{display:grid;grid-template-columns:repeat(3,1fr);background:linear-gradient(145deg,#26262c,#18181b);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:14px 0;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.stats3 div{display:flex;flex-direction:column;align-items:center;gap:2px}
+.stats3 div+div{border-left:1px solid rgba(255,255,255,.08)}
+.stats3 span{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stats3 small{font-size:13px;color:var(--muted)}
+.route{flex-direction:column;align-items:stretch;gap:10px;padding:10px}
+.route svg{max-width:none;border-radius:12px;background:#121215;display:block}
+.legend{display:flex;gap:16px;justify-content:center;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.legend .ls{border:2.5px solid #fff;background:#151517}
+.legend .le{background:var(--red);border:2px solid #fff}
+.clist{list-style:none;margin:0;padding:0;counter-reset:c;display:flex;flex-direction:column;gap:8px}
+.clist li{counter-increment:c;display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:14px;background:linear-gradient(145deg,#232328,#18181b);border:1px solid rgba(255,255,255,.06);font-size:16px;font-weight:600}
+.clist li::before{content:counter(c);flex-shrink:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;background:linear-gradient(135deg,#ff5a4f,#c62828)}
+.clist li.warm::before{content:"W";background:#3a3a41;color:#d6d6dc}
+.clist li.pen::before{content:"!";background:#ffb020;color:#151517}
+.clist li.fin::before{content:"";background:conic-gradient(#fff 25%,#151517 0 50%,#fff 0 75%,#151517 0) 0 0/10px 10px;border:2px solid #fff}
+.clist li.none{font-weight:500;color:var(--muted)}
+.clist li.none::before{display:none}
+.btn-row{display:grid;grid-template-columns:1fr 1.4fr;gap:12px}
+.btn-row .ghost{border-radius:999px}
+.ghost svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.medal-block{border-color:rgba(229,57,53,.22)}
+.medal-block.dnf{border-color:rgba(255,255,255,.06)}
+
+/* History cards */
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hstats div{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:16px;background:linear-gradient(145deg,#26262c,#18181b);border:1px solid rgba(255,255,255,.06)}
+.hstats span{font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.hstats small{font-size:12px;color:var(--muted)}
+.runlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.runlist li{display:flex;align-items:center;gap:14px;padding:10px 12px 10px 10px;border-radius:18px;background:linear-gradient(145deg,#26262c,#18181b);border:1px solid rgba(255,255,255,.06);box-shadow:0 6px 16px rgba(0,0,0,.25);cursor:pointer}
+.runlist li:hover{border-color:rgba(229,57,53,.4)}
+.thumb{width:60px;height:60px;flex-shrink:0;border-radius:12px;background:#121215;border:1px solid rgba(255,255,255,.06);overflow:hidden}
+.thumb svg{width:100%;height:100%;display:block}
+.hc{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.hc b{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.hc .meta{font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hm{flex-shrink:0;display:flex;align-items:center}
+.hm .trophy-img{width:44px;height:44px}
+.hm .tag{margin:0}
+
+/* Medal case */
+.medal-tile:not(.locked){border-color:rgba(229,57,53,.22)}
+
+@media (prefers-reduced-motion:reduce){.startcircle::after,#spinBtn.glow{animation:none}}
 </style>
 </head>
 <body>
@@ -344,23 +448,23 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
   <p class="section-title">Choose a level</p>
   <div class="cards">
     <button class="card" data-level="0">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ic lvl" data-n="1" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="ct"><b>Rookie</b><small>200 m to 500 m</small></span><span class="chev">›</span>
     </button>
     <button class="card" data-level="1">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ic lvl" data-n="2" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="ct"><b>Casual</b><small>500 m to 2 km</small></span><span class="chev">›</span>
     </button>
     <button class="card" data-level="2">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ic lvl" data-n="3" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="ct"><b>Intermediate</b><small>2 km to 5 km</small></span><span class="chev">›</span>
     </button>
     <button class="card" data-level="3">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ic lvl" data-n="4" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
       <span class="ct"><b>Crazy</b><small>5 km to 10 km. LSD</small></span><span class="chev">›</span>
     </button>
     <button class="card" data-level="4">
-      <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg></span>
+      <span class="ic box" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg></span>
       <span class="ct"><b>Custom</b><small>Set your own distance challenges</small></span><span class="chev">›</span>
     </button>
   </div>
@@ -372,7 +476,7 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
   <button id="startBtn" class="primary" disabled>Run</button>
   <button id="howToBtn" class="link">How to play</button>
   <button id="simBtn" class="link" disabled>Simulate GPS for indoor testing</button>
-  <p class="note">Real GPS needs location permission and works best outdoors with the screen on.</p>
+  <p class="note">SPIN-A-RUN needs location access. Keep it open with the screen on while you run. GPS pauses if your phone locks.</p>
 </section>
 
 <section id="screen-run" class="screen run-screen hidden">
@@ -391,16 +495,18 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
     <p id="chProgress" class="small muted"></p>
   </div>
   <div id="warn" class="warn hidden"></div>
-  <div class="wheel-wrap"><div id="ring" class="ring"></div><button id="startCircle" class="startcircle" aria-label="Start run">START</button><canvas id="wheel" width="640" height="640"></canvas><div id="hub" class="hub"><span id="hubValue" class="hub-value">--</span><span id="hubLabel" class="hub-label">spin</span></div></div>
+  <div id="pauseNote" class="pause hidden" role="alert"><b>Tracking paused</b><span id="pauseText"></span><button id="pauseOk">Got it</button></div>
+  <div class="wheel-wrap"><svg class="pointer" viewBox="0 0 40 56" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a5e"/><stop offset="1" stop-color="#b71c1c"/></linearGradient></defs><path d="M20 53L6.2 23A15 15 0 1 1 33.8 23Z" fill="url(#pg)" stroke="#fff" stroke-width="3" stroke-linejoin="round"/><circle cx="20" cy="17" r="5" fill="#fff"/></svg><div id="ring" class="ring"></div><button id="startCircle" class="startcircle" aria-label="Start run">START</button><canvas id="wheel" width="640" height="640"></canvas><div id="hub" class="hub"><span id="hubValue" class="hub-value">--</span><span id="hubLabel" class="hub-label">spin</span></div></div>
   <button id="spinBtn" class="primary">Spin</button>
   <button id="dnfBtn" class="dnf-small">End Run</button>
+  <p class="ready-hint">Keep SPIN-A-RUN open with the screen on while you run. GPS tracking pauses if your phone locks.</p>
   <button id="readyBack" class="link">Back to menu</button>
   <div id="dnfConfirm" class="confirm hidden"><div class="modal">
     <p>End this run as a DNF? It stays in your history but earns no medal.</p>
     <button id="dnfYes" class="danger">Yes, end as DNF</button>
     <button id="dnfNo" class="primary">Keep running</button>
   </div></div>
-  <p id="gpsStatus" class="small muted"></p>
+  <div class="status-row"><span class="pill hidden" id="gpsPill"><i></i><span id="gpsStatus"></span></span><span class="pill hidden" id="awakePill"><i></i><span id="awakeStatus"></span></span></div>
 </section>
 
 <section id="screen-summary" class="screen hidden">
@@ -409,30 +515,32 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
     <h2 id="sumTitle">Run Complete!</h2>
     <p id="sumDate" class="small muted" style="text-align:center"></p>
   </div>
-  <div class="stats" id="sumStats"></div>
+  <div class="hero-km"><span id="sumKm">0.00</span><small>km</small></div>
+  <div class="stats3" id="sumStats"></div>
+  <p id="sumPause" class="pause-note hidden"></p>
   <div id="sumMedal"></div>
   <div id="sumTrophy"></div>
   <p class="section-title">Route</p>
   <div class="route" id="sumRoute"></div>
   <p class="section-title">Challenges</p>
-  <ul class="list" id="sumList"></ul>
-  <button id="shareBtn" class="ghost">Share</button>
+  <ol class="clist" id="sumList"></ol>
+  <div class="btn-row"><button id="shareBtn" class="ghost"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>Share</button><button id="backBtn" class="primary">Done</button></div>
   <p id="saveNote" class="small muted"></p>
-  <button id="backBtn" class="primary">Done</button>
 </section>
 
 <section id="screen-history" class="screen hidden">
   <h1>Run History</h1>
+  <div class="hstats" id="histStats"></div>
   <div class="chips" id="histChips"></div>
-  <ul class="list" id="histList"></ul>
+  <ul class="runlist" id="histList"></ul>
   <p id="histEmpty" class="note hidden">No saved runs yet. Finish a run to see it here.</p>
 </section>
 
 <section id="screen-medals" class="screen hidden">
   <h1>Medal Case</h1>
-  <p class="section-title">Trophies</p>
+  <p class="section-title">Trophies <span class="count" id="trophyCount"></span></p>
   <div class="medal-grid" id="trophyGrid"></div>
-  <p class="section-title">Medals</p>
+  <p class="section-title">Medals <span class="count" id="medalCount"></span></p>
   <div class="medal-grid" id="medalGrid"></div>
   <p id="medalEmpty" class="note hidden">No medals yet. Complete a run to earn one.</p>
 </section>
@@ -552,19 +660,49 @@ function alertNeedSpin(){
 
 // ---------- Wake lock: keep the screen on during a run ----------
 let wakeLock = null;
+function setPill(id, text, state){
+  const pill = $(id + 'Pill');
+  $(id + 'Status').textContent = text;
+  pill.dataset.state = state || '';
+  pill.classList.toggle('hidden', !text);
+}
+function setGps(text, state){ setPill('gps', text, state); }
 async function keepAwake(){
+  if(!running) return;
+  if(!('wakeLock' in navigator)){ setPill('awake', 'Keep your screen on', 'wait'); return; }
   try {
-    if('wakeLock' in navigator){
-      wakeLock = await navigator.wakeLock.request('screen');
-      wakeLock.addEventListener('release', () => { wakeLock = null; });
-    }
-  } catch(e) {}
+    wakeLock = await navigator.wakeLock.request('screen');
+    setPill('awake', 'Screen stays on', 'ok');
+    wakeLock.addEventListener('release', () => { wakeLock = null; if(running) setPill('awake', 'Screen can lock', 'wait'); });
+  } catch(e) { setPill('awake', 'Keep your screen on', 'wait'); }
 }
 function releaseAwake(){
   try { if(wakeLock){ wakeLock.release(); wakeLock = null; } } catch(e) {}
 }
+
+// ---------- Tracking pauses: the browser stops GPS when the phone locks or the app goes to the background ----------
+const PAUSE_MIN_MS = 15000;
+let lastAlive = 0, pausedMs = 0;
+function checkGap(){
+  if(!running) return;
+  const now = Date.now();
+  if(lastAlive && now - lastAlive > PAUSE_MIN_MS) showPause(now - lastAlive);
+  lastAlive = now;
+}
+function showPause(gap){
+  pausedMs += gap;
+  recent = [];
+  const total = pausedMs > gap ? ` (${fmtTime(pausedMs/1000)} in total this run)` : '';
+  $('pauseText').textContent = `GPS couldn\u2019t track for ${fmtTime(gap/1000)}${total} while your phone was locked or SPIN-A-RUN was in the background. Distance from that time may be short. Keep the app open with the screen on.`;
+  $('pauseNote').classList.remove('hidden');
+  if(navigator.vibrate) navigator.vibrate(200);
+}
+$('pauseOk').onclick = () => $('pauseNote').classList.add('hidden');
 document.addEventListener('visibilitychange', () => {
-  if(document.visibilityState === 'visible' && running) keepAwake();
+  if(!running) return;
+  if(document.visibilityState === 'hidden'){ lastAlive = Date.now(); return; }
+  checkGap();
+  keepAwake();
 });
 
 // ---------- Storage (per device, browser only) ----------
@@ -601,25 +739,53 @@ function projectRoute(pts, w, h, pad){
 function routeSVG(pts){
   if(!pts || pts.length < 2)
     return '<p class="muted small" style="margin:8px">Not enough GPS points to draw a route.</p>';
-  const P = projectRoute(pts, 300, 300, 20);
+  const W = 320, H = 220;
+  const P = projectRoute(pts, W, H, 28);
   const line = P.map(([x,y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
   const s = P[0], e = P[P.length-1];
-  return `<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-    <polyline points="${line}" fill="none" stroke="${RED}" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
-    <circle cx="${s[0].toFixed(1)}" cy="${s[1].toFixed(1)}" r="8" fill="${MUTED}"/>
-    <circle cx="${e[0].toFixed(1)}" cy="${e[1].toFixed(1)}" r="8" fill="${WHITE}"/>
-  </svg>`;
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Route map">
+    <defs>
+      <pattern id="rgrid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/></pattern>
+      <linearGradient id="rline" gradientUnits="userSpaceOnUse" x1="${s[0]}" y1="${s[1]}" x2="${e[0]}" y2="${e[1]}"><stop offset="0" stop-color="#ff9a7a"/><stop offset="1" stop-color="${RED}"/></linearGradient>
+    </defs>
+    <rect width="${W}" height="${H}" fill="url(#rgrid)"/>
+    <polyline points="${line}" fill="none" stroke="${RED}" stroke-opacity=".22" stroke-width="12" stroke-linejoin="round" stroke-linecap="round"/>
+    <polyline points="${line}" fill="none" stroke="url(#rline)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${s[0].toFixed(1)}" cy="${s[1].toFixed(1)}" r="6.5" fill="#151517" stroke="#fff" stroke-width="3"/>
+    <circle cx="${e[0].toFixed(1)}" cy="${e[1].toFixed(1)}" r="7.5" fill="${RED}" stroke="#fff" stroke-width="3"/>
+  </svg><div class="legend"><span><i class="ls"></i>Start</span><span><i class="le"></i>End</span></div>`;
+}
+// Small route preview for history cards
+function routeThumb(pts){
+  if(!pts || pts.length < 2)
+    return '<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="12" fill="none" stroke="#3a3a41" stroke-width="3" stroke-dasharray="4 4"/></svg>';
+  const P = projectRoute(pts, 60, 60, 10);
+  const line = P.map(([x,y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ');
+  const e = P[P.length-1];
+  return `<svg viewBox="0 0 60 60"><polyline points="${line}" fill="none" stroke="${RED}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${e[0].toFixed(1)}" cy="${e[1].toFixed(1)}" r="3" fill="#fff"/></svg>`;
+}
+function roundRect(g, x, y, w, h, r){
+  g.beginPath();
+  g.moveTo(x + r, y);
+  g.arcTo(x + w, y, x + w, y + h, r);
+  g.arcTo(x + w, y + h, x, y + h, r);
+  g.arcTo(x, y + h, x, y, r);
+  g.arcTo(x, y, x + w, y, r);
+  g.closePath();
 }
 function drawRouteCanvas(g, pts, x, y, w, h){
-  const P = projectRoute(pts, w, h, 60);
+  const P = projectRoute(pts, w, h, 70);
   g.save();
   g.translate(x, y);
-  g.beginPath();
-  P.forEach(([px, py], i) => i ? g.lineTo(px, py) : g.moveTo(px, py));
-  g.strokeStyle = RED; g.lineWidth = 10; g.lineJoin = 'round'; g.lineCap = 'round'; g.stroke();
+  const path = () => { g.beginPath(); P.forEach(([px, py], i) => i ? g.lineTo(px, py) : g.moveTo(px, py)); };
+  g.lineJoin = 'round'; g.lineCap = 'round';
+  path(); g.strokeStyle = 'rgba(229,57,53,.22)'; g.lineWidth = 34; g.stroke();
   const s = P[0], e = P[P.length-1];
-  g.beginPath(); g.arc(s[0], s[1], 16, 0, 2*Math.PI); g.fillStyle = MUTED; g.fill();
-  g.beginPath(); g.arc(e[0], e[1], 16, 0, 2*Math.PI); g.fillStyle = WHITE; g.fill();
+  const lg = g.createLinearGradient(s[0], s[1], e[0], e[1]);
+  lg.addColorStop(0, '#ff9a7a'); lg.addColorStop(1, RED);
+  path(); g.strokeStyle = lg; g.lineWidth = 11; g.stroke();
+  g.beginPath(); g.arc(s[0], s[1], 16, 0, 2*Math.PI); g.fillStyle = INK; g.fill(); g.lineWidth = 7; g.strokeStyle = WHITE; g.stroke();
+  g.beginPath(); g.arc(e[0], e[1], 19, 0, 2*Math.PI); g.fillStyle = RED; g.fill(); g.lineWidth = 7; g.strokeStyle = WHITE; g.stroke();
   g.restore();
 }
 
@@ -777,16 +943,30 @@ function renderChips(){
 function showHistory(){
   renderChips();
   const runs = loadRuns().filter(r => histFilter === 'all' || String(r.level) === histFilter);
+  const totalKm = runs.reduce((a, r) => a + r.km, 0);
+  const medals = runs.filter(r => !r.dnf).length;
+  const hs = $('histStats'); hs.innerHTML = '';
+  [[String(runs.length), runs.length === 1 ? 'Run' : 'Runs'], [totalKm.toFixed(1), 'Total km'], [String(medals), medals === 1 ? 'Medal' : 'Medals']].forEach(([v, l]) => {
+    const d = document.createElement('div');
+    d.innerHTML = '<span></span><small></small>';
+    d.querySelector('span').textContent = v;
+    d.querySelector('small').textContent = l;
+    hs.appendChild(d);
+  });
   const ul = $('histList'); ul.innerHTML = '';
   $('histEmpty').classList.toggle('hidden', runs.length > 0);
   runs.forEach(run => {
     const li = document.createElement('li');
-    li.className = 'run';
     li.tabIndex = 0;
-    li.innerHTML = '<b></b><div class="meta"></div>';
-    li.querySelector('b').append(`${run.km.toFixed(2)} km · ${fmtTime(run.sec)}`);
-    if(run.dnf){ const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'DNF'; li.querySelector('b').append(t); }
-    li.querySelector('.meta').textContent = `${new Date(run.date).toLocaleString()} · ${levelName(run.level)} · ${run.challenges.length} challenges`;
+    li.innerHTML = '<span class="thumb"></span><span class="hc"><b></b><span class="meta"></span><span class="meta"></span></span><span class="hm"></span>';
+    li.querySelector('.thumb').innerHTML = routeThumb(run.route);
+    li.querySelector('b').textContent = `${run.km.toFixed(2)} km`;
+    const metas = li.querySelectorAll('.meta');
+    metas[0].textContent = `${fmtTime(run.sec)} · ${levelName(run.level)}`;
+    metas[1].textContent = new Date(run.date).toLocaleDateString(undefined, {weekday:'short', month:'short', day:'numeric', year:'numeric'});
+    const hm = li.querySelector('.hm');
+    if(run.dnf){ const t = document.createElement('span'); t.className = 'tag'; t.textContent = 'DNF'; hm.append(t); }
+    else hm.append(artImg('finisher', false, 'Finisher medal'));
     li.onclick = () => showRunDetail(run, false, 'history');
     li.onkeydown = e => { if(e.key === 'Enter') showRunDetail(run, false, 'history'); };
     ul.appendChild(li);
@@ -844,6 +1024,7 @@ function renderTrophies(){
     }
     grid.appendChild(tile);
   });
+  $('trophyCount').textContent = `${TROPHIES.filter(t => runs.some(r => !r.dnf && r.km >= t.km - EPS)).length} of ${TROPHIES.length}`;
 }
 
 // ---------- Medal case ----------
@@ -852,6 +1033,7 @@ function showMedals(){
   const runs = loadRuns().filter(r => !r.dnf);
   const grid = $('medalGrid'); grid.innerHTML = '';
   $('medalEmpty').classList.toggle('hidden', runs.length > 0);
+  $('medalCount').textContent = String(runs.length);
   if(!runs.length){
     // A greyed-out medal shows what the first finished run earns
     const tile = document.createElement('div');
@@ -888,6 +1070,9 @@ function resetRun(){
   $('warn').classList.add('hidden');
   $('dnfConfirm').classList.add('hidden');
   $('dnfBtn').classList.remove('hidden');
+  $('pauseNote').classList.add('hidden');
+  lastAlive = 0; pausedMs = 0;
+  setGps(''); setPill('awake', '');
 }
 
 function start(){
@@ -905,6 +1090,7 @@ function start(){
   $('sDist').textContent = '0.00'; $('sTime').textContent = '00:00';
   $('sPace').textContent = '--:--'; $('sSpeed').textContent = '--:--';
   $('chLabel').textContent = 'Tap START when you are ready';
+  $('chProgress').textContent = `${levelName(level)} level`;
   drawWheel();
 }
 
@@ -917,6 +1103,7 @@ function go(){
   running = true;
   keepAwake();
   startT = Date.now();
+  lastAlive = startT;
   drawWheel();
   tickTimer = setInterval(tick, 1000);
   if(simulate) startSim(); else startGPS();
@@ -958,12 +1145,13 @@ function finish(dnf){
     level: level,
     dnf: !!dnf,
     challenges: completed.slice(),
-    route: sampleRoute(route)
+    route: sampleRoute(route),
+    pausedSec: Math.round(pausedMs/1000)
   };
   const runs = loadRuns();
   run.trophies = newTrophies(runs, run);
   runs.unshift(run);
-  if(!saveRuns(runs)) $('gpsStatus').textContent = 'Could not save this run in the browser.';
+  if(!saveRuns(runs)) setGps('Could not save this run in the browser.', 'bad');
   showRunDetail(run, true, 'setup');
 }
 
@@ -974,10 +1162,10 @@ function showRunDetail(run, isNew, from){
   $('sumCheck').textContent = run.dnf ? '✕' : '✓';
   $('sumCheck').style.background = run.dnf ? MUTED : RED;
   $('sumDate').textContent = `${new Date(run.date).toLocaleString()} · ${levelName(run.level)}`;
+  $('sumKm').textContent = run.km.toFixed(2);
   const stats = [
-    [run.km.toFixed(2)+' km','Distance'],
     [fmtTime(run.sec),'Time'],
-    [run.pace ? fmtPace(run.pace) + ' /km' : '--:--','Avg pace'],
+    [run.pace ? fmtPace(run.pace) : '--:--','Avg /km'],
     [String(run.challenges.length),'Challenges']
   ];
   const sumStats = $('sumStats'); sumStats.innerHTML = '';
@@ -988,8 +1176,11 @@ function showRunDetail(run, isNew, from){
     d.querySelector('small').textContent = l;
     sumStats.appendChild(d);
   });
+  const ps = $('sumPause');
+  ps.classList.toggle('hidden', !(run.pausedSec > 0));
+  if(run.pausedSec > 0) ps.textContent = `GPS tracking was paused for ${fmtTime(run.pausedSec)} during this run, so the distance may be short.`;
   const medalBox = $('sumMedal');
-  medalBox.innerHTML = '<div class="medal-block"><div><b></b><small></small></div></div>';
+  medalBox.innerHTML = `<div class="medal-block${run.dnf ? ' dnf' : ''}"><div><b></b><small></small></div></div>`;
   medalBox.querySelector('.medal-block').prepend(artImg('finisher', run.dnf, run.dnf ? 'Finisher medal (not earned)' : 'Finisher medal'));
   medalBox.querySelector('b').textContent = run.dnf ? 'No medal' : `${levelName(run.level)} Finisher`;
   medalBox.querySelector('small').textContent = run.dnf ? 'DNF runs don’t earn a medal.' : 'Medal earned';
@@ -1009,10 +1200,13 @@ function showRunDetail(run, isNew, from){
   $('sumRoute').innerHTML = routeSVG(run.route);
   const ul = $('sumList'); ul.innerHTML = '';
   if(!run.challenges.length){
-    const li = document.createElement('li'); li.textContent = 'No challenges completed.'; ul.appendChild(li);
+    const li = document.createElement('li'); li.className = 'none'; li.textContent = 'No challenges completed.'; ul.appendChild(li);
   }
   run.challenges.forEach(lbl => {
-    const li = document.createElement('li'); li.textContent = '✓ ' + lbl; ul.appendChild(li);
+    const li = document.createElement('li');
+    li.className = /^Warm-up/.test(lbl) ? 'warm' : /^Penalty/.test(lbl) ? 'pen' : /FINISH/.test(lbl) ? 'fin' : '';
+    li.textContent = lbl.replace(/\s*🏁/g, '');
+    ul.appendChild(li);
   });
   $('saveNote').textContent = '';
   $('backBtn').textContent = isNew ? 'Done' : 'Back';
@@ -1055,90 +1249,160 @@ function celebrate(){
 }
 
 // ---------- Story image (1080 x 1920, for Instagram and Facebook stories) ----------
+const TITLE_FONT = "'Racing Sans One', 'Inter', sans-serif";
+const LOGO = new Image();
+try {
+  LOGO.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(document.querySelector('#splash svg')));
+} catch(e) {}
 function makeStory(run){
   const W = 1080, H = 1920, pad = 80;
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
   const g = c.getContext('2d');
-  g.fillStyle = INK; g.fillRect(0, 0, W, H);
+  const artOk = im => im && im.complete && im.naturalWidth > 0;
+  const fit = (text, weight, size, min, maxW, family) => {
+    g.font = `${weight} ${size}px ${family || FONT}`;
+    while(size > min && g.measureText(text).width > maxW){ size -= 4; g.font = `${weight} ${size}px ${family || FONT}`; }
+    return size;
+  };
 
-  g.fillStyle = WHITE; g.font = `800 120px ${FONT}`; g.textAlign = 'left';
-  g.fillText(run.dnf ? 'DNF' : 'Run Complete!', pad, 230);
-  g.fillStyle = MUTED; g.font = `600 42px ${FONT}`;
-  g.fillText(`${new Date(run.date).toLocaleDateString()} · ${levelName(run.level)}`, pad, 300);
+  // Background with red glow
+  const bg = g.createLinearGradient(0, 0, 0, H);
+  bg.addColorStop(0, '#1d1d22'); bg.addColorStop(1, '#0a0a0c');
+  g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  let glow = g.createRadialGradient(W*0.8, 160, 0, W*0.8, 160, 950);
+  glow.addColorStop(0, run.dnf ? 'rgba(154,154,163,.18)' : 'rgba(229,57,53,.42)'); glow.addColorStop(1, 'rgba(229,57,53,0)');
+  g.fillStyle = glow; g.fillRect(0, 0, W, H);
+  glow = g.createRadialGradient(0, H, 0, 0, H, 800);
+  glow.addColorStop(0, 'rgba(229,57,53,.14)'); glow.addColorStop(1, 'rgba(229,57,53,0)');
+  g.fillStyle = glow; g.fillRect(0, 0, W, H);
 
+  // Brand row
+  g.textBaseline = 'middle'; g.textAlign = 'left';
+  if(artOk(LOGO)) g.drawImage(LOGO, pad, 82, 96, 96);
+  g.fillStyle = WHITE; g.font = `400 62px ${TITLE_FONT}`;
+  g.fillText('SPIN-A-RUN', pad + (artOk(LOGO) ? 120 : 0), 132);
+  const lv = levelName(run.level).toUpperCase();
+  g.font = `700 30px ${FONT}`;
+  const lw = g.measureText(lv).width + 60;
+  roundRect(g, W - pad - lw, 102, lw, 60, 30);
+  g.fillStyle = 'rgba(255,255,255,.06)'; g.fill();
+  g.lineWidth = 2.5; g.strokeStyle = 'rgba(255,255,255,.3)'; g.stroke();
+  g.fillStyle = WHITE; g.textAlign = 'center';
+  g.fillText(lv, W - pad - lw/2, 133);
+  g.textBaseline = 'alphabetic'; g.textAlign = 'left';
+
+  // Title and date
+  const title = run.dnf ? 'DNF' : 'RUN COMPLETE';
+  fit(title, 400, 124, 80, W - 2*pad, TITLE_FONT);
+  g.fillStyle = run.dnf ? '#c9c9d1' : WHITE;
+  g.fillText(title, pad, 350);
+  g.fillStyle = MUTED; g.font = `600 40px ${FONT}`;
+  g.fillText(new Date(run.date).toLocaleDateString(undefined, {weekday:'long', month:'long', day:'numeric', year:'numeric'}), pad, 418);
+
+  // Distance
   const kmText = run.km.toFixed(2);
-  g.fillStyle = WHITE;
-  let kmSize = 340; g.font = `800 ${kmSize}px ${FONT}`;
+  let kmSize = 330; g.font = `800 ${kmSize}px ${FONT}`;
   while(kmSize > 160 && g.measureText(kmText).width + 150 > W - 2*pad){ kmSize -= 10; g.font = `800 ${kmSize}px ${FONT}`; }
-  g.fillText(kmText, pad - 10, 690);
+  const kg = g.createLinearGradient(0, 520, 0, 760);
+  kg.addColorStop(0, '#ffffff'); kg.addColorStop(1, '#b4b4be');
+  g.fillStyle = kg;
+  g.fillText(kmText, pad - 10, 760);
   const kmW = g.measureText(kmText).width;
   g.fillStyle = MUTED; g.font = `600 80px ${FONT}`;
-  g.fillText('km', pad + kmW + 10, 690);
-  g.fillStyle = RED; g.fillRect(pad, 730, 420, 12);
+  g.fillText('km', pad + kmW + 10, 760);
+  const bar = g.createLinearGradient(pad, 0, pad + 420, 0);
+  bar.addColorStop(0, '#ff6a5e'); bar.addColorStop(1, '#b71c1c');
+  roundRect(g, pad, 800, 420, 14, 7); g.fillStyle = bar; g.fill();
 
+  // Stats card
+  const sy = 870, sh = 170, colW = (W - 2*pad) / 3;
+  roundRect(g, pad, sy, W - 2*pad, sh, 30);
+  g.fillStyle = 'rgba(255,255,255,.05)'; g.fill();
+  g.lineWidth = 2; g.strokeStyle = 'rgba(255,255,255,.08)'; g.stroke();
   const stats = [
     [fmtTime(run.sec), 'Time'],
     [run.pace ? fmtPace(run.pace) : '--:--', 'Avg /km'],
     [String(run.challenges.length), 'Challenges']
   ];
-  const colW = (W - 2*pad) / 3;
+  g.textAlign = 'center';
   stats.forEach(([v, l], i) => {
-    const x = pad + i*colW;
-    g.fillStyle = WHITE; g.font = `800 76px ${FONT}`;
-    g.fillText(v, x, 880);
-    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
-    g.fillText(l, x, 935);
+    const x = pad + colW*i + colW/2;
+    if(i){ g.fillStyle = 'rgba(255,255,255,.1)'; g.fillRect(pad + colW*i, sy + 34, 2, sh - 68); }
+    g.fillStyle = WHITE; g.font = `800 68px ${FONT}`;
+    g.fillText(v, x, sy + 92);
+    g.fillStyle = MUTED; g.font = `600 32px ${FONT}`;
+    g.fillText(l, x, sy + 138);
   });
+  g.textAlign = 'left';
 
-  const rx = pad, ry = 1010, rw = W - 2*pad, rh = 600;
-  g.fillStyle = '#1f1f23'; g.fillRect(rx, ry, rw, rh);
+  // Route card
+  const rx = pad, ry = 1090, rw = W - 2*pad, rh = 500;
+  g.save();
+  roundRect(g, rx, ry, rw, rh, 34);
+  g.fillStyle = '#131316'; g.fill();
+  g.clip();
+  g.strokeStyle = 'rgba(255,255,255,.045)'; g.lineWidth = 2;
+  for(let x = rx; x < rx + rw; x += 60){ g.beginPath(); g.moveTo(x, ry); g.lineTo(x, ry + rh); g.stroke(); }
+  for(let y = ry; y < ry + rh; y += 60){ g.beginPath(); g.moveTo(rx, y); g.lineTo(rx + rw, y); g.stroke(); }
   if(run.route && run.route.length >= 2){
     drawRouteCanvas(g, run.route, rx, ry, rw, rh);
   } else {
-    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
-    g.fillText('No route recorded', rx + 40, ry + rh/2);
-  }
-
-  const artOk = im => im && im.complete && im.naturalWidth > 0;
-  if(!run.dnf && artOk(MEDAL_ART)){
-    const mh = 165, mw = mh * MEDAL_ART.naturalWidth / MEDAL_ART.naturalHeight;
-    g.drawImage(MEDAL_ART, pad, 1640, mw, mh);
+    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`; g.textAlign = 'center';
+    g.fillText('No route recorded', rx + rw/2, ry + rh/2);
     g.textAlign = 'left';
-    g.fillStyle = WHITE; g.font = `800 50px ${FONT}`;
-    g.fillText(`${levelName(run.level)} Finisher`, pad + 200, 1732);
+  }
+  g.restore();
+  roundRect(g, rx, ry, rw, rh, 34);
+  g.lineWidth = 2; g.strokeStyle = 'rgba(255,255,255,.08)'; g.stroke();
+
+  // Medal and trophies
+  const my = 1640;
+  if(!run.dnf){
     const won = TROPHIES.filter(t => (run.trophies || []).includes(t.name));
-    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
-    g.fillText(won.length ? 'Trophy: ' + won.map(t => t.name).join(', ') : 'Medal earned', pad + 200, 1790);
-    const top = won[won.length - 1];
-    if(top && artOk(TROPHY_ART[top.name])){
-      const ti = TROPHY_ART[top.name], th = 200, tw = th * ti.naturalWidth / ti.naturalHeight;
-      g.drawImage(ti, W - pad - tw, 1640, tw, th);
+    const shown = won.slice(-2).filter(t => artOk(TROPHY_ART[t.name]));
+    let right = W - pad;
+    shown.slice().reverse().forEach(t => {
+      const ti = TROPHY_ART[t.name], th = 180, tw = th * ti.naturalWidth / ti.naturalHeight;
+      g.drawImage(ti, right - tw, my, tw, th);
+      right -= tw + 20;
+    });
+    let tx = pad;
+    if(artOk(MEDAL_ART)){
+      const mh = 190, mw = mh * MEDAL_ART.naturalWidth / MEDAL_ART.naturalHeight;
+      g.drawImage(MEDAL_ART, pad, my - 6, mw, mh);
+      tx = pad + mw + 34;
+    } else {
+      // Hexagon fallback if the medal art hasn't loaded
+      g.fillStyle = RED; g.beginPath();
+      const hx = pad + 80, hy = my + 90, hr = 80;
+      for(let i = 0; i < 6; i++){
+        const a = Math.PI/3*i + Math.PI/6;
+        i ? g.lineTo(hx + hr*Math.cos(a), hy + hr*Math.sin(a)) : g.moveTo(hx + hr*Math.cos(a), hy + hr*Math.sin(a));
+      }
+      g.closePath(); g.fill();
+      g.fillStyle = WHITE; g.font = `800 40px ${FONT}`; g.textAlign = 'center';
+      g.fillText(medalCode(run.level), hx, hy + 14); g.textAlign = 'left';
+      tx = pad + 194;
     }
-  } else if(!run.dnf){
-    g.fillStyle = RED;
-    g.beginPath();
-    const cx = pad + 80, cy = 1740, r = 80;
-    for(let i = 0; i < 6; i++){
-      const a = Math.PI/3*i + Math.PI/6;
-      const px = cx + r*Math.cos(a), py = cy + r*Math.sin(a);
-      i ? g.lineTo(px, py) : g.moveTo(px, py);
-    }
-    g.closePath(); g.fill();
-    g.fillStyle = WHITE; g.font = `800 40px ${FONT}`; g.textAlign = 'center';
-    g.fillText(medalCode(run.level), cx, 1752);
-    g.textAlign = 'left';
-    g.fillStyle = WHITE; g.font = `800 50px ${FONT}`;
-    g.fillText(`${levelName(run.level)} Finisher`, pad + 200, 1732);
-    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
-    g.fillText('Medal earned', pad + 200, 1790);
+    const maxW = right - tx - 10;
+    g.fillStyle = WHITE; fit(`${levelName(run.level)} Finisher`, 800, 52, 30, maxW);
+    g.fillText(`${levelName(run.level)} Finisher`, tx, my + 82);
+    g.fillStyle = won.length ? '#ff8a7a' : MUTED;
+    const sub = won.length ? (won.length > 1 ? 'Trophies unlocked' : 'Trophy unlocked') : 'Medal earned';
+    fit(sub, 600, 36, 24, maxW);
+    g.fillText(sub, tx, my + 136);
   } else {
-    g.fillStyle = MUTED; g.font = `600 40px ${FONT}`;
-    g.fillText('No medal for a DNF', pad, 1748);
+    g.fillStyle = '#c9c9d1'; g.font = `800 50px ${FONT}`;
+    g.fillText('Did not finish', pad, my + 82);
+    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
+    g.fillText('No medal for a DNF', pad, my + 136);
   }
 
-  g.fillStyle = MUTED; g.font = `600 34px ${FONT}`; g.textAlign = 'left';
-  g.fillText('SPIN-A-RUN', pad, 1860);
+  // Footer
+  g.fillStyle = 'rgba(255,255,255,.1)'; g.fillRect(pad, 1848, W - 2*pad, 2);
+  g.fillStyle = MUTED; g.font = `600 32px ${FONT}`;
+  g.fillText('How far will you run today?', pad, 1894);
   return c;
 }
 async function saveStory(run){
@@ -1194,6 +1458,7 @@ $('shareBtn').onclick = () => { if(currentDetail) shareRun(currentDetail); };
 
 function tick(){
   if(!running) return;
+  checkGap();
   const el = (Date.now() - startT)/1000, km = totalDist/1000;
   $('sTime').textContent = fmtTime(el);
   $('sDist').textContent = km.toFixed(2);
@@ -1205,14 +1470,14 @@ function tick(){
 // ---------- GPS ----------
 function startGPS(){
   if(!navigator.geolocation){
-    $('gpsStatus').textContent = 'GPS not available in this browser.';
+    setGps('GPS not available in this browser.', 'bad');
     return;
   }
-  $('gpsStatus').textContent = 'Waiting for GPS fix...';
+  setGps('Finding GPS\u2026', 'wait');
   watchId = navigator.geolocation.watchPosition(
-    p => { $('gpsStatus').textContent = 'GPS on'; onFix(p.coords.latitude, p.coords.longitude, p.coords.accuracy, Date.now()); },
+    p => { setGps(p.coords.accuracy > 25 ? 'Weak GPS signal' : 'GPS on', p.coords.accuracy > 25 ? 'wait' : 'ok'); onFix(p.coords.latitude, p.coords.longitude, p.coords.accuracy, Date.now()); },
     e => {
-      $('gpsStatus').textContent = gpsErrorText(e);
+      setGps(gpsErrorText(e), e.code === 3 ? 'wait' : 'bad');
       if(e.code === 1) stopGPS(); // permission denied: retrying won't help
     },
     { enableHighAccuracy:true, maximumAge:0, timeout:15000 }
@@ -1225,7 +1490,7 @@ function gpsErrorText(e){
   return 'GPS isn\u2019t working.';
 }
 function startSim(){
-  $('gpsStatus').textContent = 'Simulated GPS (no real location)';
+  setGps('Simulated GPS', 'wait');
   simTimer = setInterval(() => {
     simSpeed = Math.max(1.5, Math.min(5, simSpeed + (Math.random() - 0.5)));
     simLat += simSpeed / 111320;
@@ -1272,6 +1537,7 @@ function updateChallengeUI(){
   $('chProgress').textContent = current.final
     ? 'FINISH 🏁'
     : `${fmtDist(Math.floor(current.progress))} of ${fmtDist(current.target)}`;
+  if(!spinning) drawWheel();
 }
 
 function completeChallenge(){
@@ -1290,6 +1556,7 @@ function completeChallenge(){
   current = null;
   $('chBar').style.width = '100%';
   $('challengeBox').dataset.type = 'done';
+  drawWheel(); // clear the progress ring
   alertNeedSpin();
   if(wasFinal){
     $('chLabel').textContent = 'Finish complete 🏁';
@@ -1368,41 +1635,85 @@ function sliceArcs(){
     return {start, arc};
   });
 }
+// Small checkerboard used on the FINISH slice
+const CHECKER = (() => {
+  const c = document.createElement('canvas'); c.width = c.height = 20;
+  const g = c.getContext('2d');
+  g.fillStyle = '#fff'; g.fillRect(0, 0, 20, 20);
+  g.fillStyle = '#151517'; g.fillRect(0, 0, 10, 10); g.fillRect(10, 10, 10, 10);
+  return c;
+})();
 function drawWheel(){
   const canvas = $('wheel'), ctx = canvas.getContext('2d');
-  const W = canvas.width, cx = W/2, cy = W/2, r = W/2 - 26;
+  const W = canvas.width, cx = W/2, cy = W/2;
+  const R_TRACK = W/2 - 9, R_RIM = W/2 - 26, r = W/2 - 50;
   ctx.clearRect(0, 0, W, W);
 
-  // White rim with tick marks
-  ctx.beginPath(); ctx.arc(cx, cy, W/2 - 8, 0, 2*Math.PI);
-  ctx.strokeStyle = WHITE; ctx.lineWidth = 8; ctx.stroke();
-  for(let i = 0; i < 60; i++){
-    const a = angle + i*(2*Math.PI/60);
-    const inner = i % 5 === 0 ? r + 6 : r + 14;
-    ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(a)*inner, cy + Math.sin(a)*inner);
-    ctx.lineTo(cx + Math.cos(a)*(W/2 - 16), cy + Math.sin(a)*(W/2 - 16));
-    ctx.strokeStyle = 'rgba(255,255,255,.5)'; ctx.lineWidth = i % 5 === 0 ? 3 : 1.5; ctx.stroke();
+  // Progress ring: fills as the current challenge is run
+  ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.arc(cx, cy, R_TRACK, 0, 2*Math.PI);
+  ctx.strokeStyle = 'rgba(255,255,255,.07)'; ctx.lineWidth = 10; ctx.stroke();
+  const pct = current && current.target ? Math.min(1, current.progress / current.target) : 0;
+  if(pct > 0.002){
+    ctx.beginPath(); ctx.arc(cx, cy, R_TRACK, -Math.PI/2, -Math.PI/2 + 2*Math.PI*pct);
+    ctx.strokeStyle = RED; ctx.lineWidth = 10;
+    ctx.shadowColor = 'rgba(229,57,53,.8)'; ctx.shadowBlur = 14; ctx.stroke(); ctx.shadowBlur = 0;
   }
 
+  // Rim with lights
+  const rg = ctx.createLinearGradient(0, cy - R_RIM, 0, cy + R_RIM);
+  rg.addColorStop(0, '#45454e'); rg.addColorStop(1, '#141417');
+  ctx.beginPath(); ctx.arc(cx, cy, R_RIM, 0, 2*Math.PI);
+  ctx.fillStyle = rg; ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.stroke();
+  const N = 24, phase = Math.floor(performance.now() / 90);
+  for(let i = 0; i < N; i++){
+    const a = i * 2*Math.PI/N - Math.PI/2;
+    const br = (R_RIM + r)/2;
+    const lit = spinning ? (i + phase) % 3 === 0 : i % 2 === 0;
+    ctx.beginPath(); ctx.arc(cx + Math.cos(a)*br, cy + Math.sin(a)*br, 5, 0, 2*Math.PI);
+    ctx.fillStyle = lit ? '#fff' : 'rgba(255,255,255,.22)';
+    if(lit){ ctx.shadowColor = 'rgba(255,190,170,.9)'; ctx.shadowBlur = 10; }
+    ctx.fill(); ctx.shadowBlur = 0;
+  }
+
+  // Slices
   const A = sliceArcs();
+  let n = 0;
   slices.forEach((sl, i) => {
-    const a0 = angle + A[i].start, a1 = a0 + A[i].arc;
+    const a0 = angle + A[i].start, a1 = a0 + A[i].arc, mid = a0 + A[i].arc/2;
     const isFinal = sl.type === 'final';
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
-    const gr = ctx.createRadialGradient(cx, cy, r*0.25, cx, cy, r);
-    gr.addColorStop(0, isFinal ? '#ff6a5e' : '#36363d'); gr.addColorStop(1, isFinal ? '#b71c1c' : '#202025');
+    const wedge = () => { ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath(); };
+    wedge();
+    const gr = ctx.createRadialGradient(cx, cy, r*0.2, cx, cy, r);
+    if(isFinal){ gr.addColorStop(0, '#ff6a5e'); gr.addColorStop(1, '#b71c1c'); }
+    else if(n++ % 2){ gr.addColorStop(0, '#3a3a42'); gr.addColorStop(1, '#25252b'); }
+    else { gr.addColorStop(0, '#2c2c33'); gr.addColorStop(1, '#1a1a1e'); }
     ctx.fillStyle = gr; ctx.fill();
-    ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.stroke();
+    if(isFinal){
+      // Checkered band at the outer edge of the FINISH slice
+      ctx.save(); wedge(); ctx.clip();
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2*Math.PI); ctx.arc(cx, cy, r*0.86, 0, 2*Math.PI, true);
+      ctx.fillStyle = ctx.createPattern(CHECKER, 'repeat'); ctx.fill();
+      ctx.restore();
+    }
+    wedge(); ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.stroke();
+
+    // Labels stay upright on both sides of the wheel
+    const flip = Math.cos(mid) < 0;
     ctx.save();
-    ctx.translate(cx, cy); ctx.rotate(a0 + A[i].arc/2);
-    ctx.fillStyle = WHITE;
-    ctx.font = `800 ${isFinal ? 30 : 42}px ${FONT}`;
-    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-    ctx.fillText(isFinal ? 'FINISH 🏁' : sl.c.short, r - 26, 0);
+    ctx.translate(cx, cy); ctx.rotate(flip ? mid + Math.PI : mid);
+    ctx.fillStyle = WHITE; ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,.45)'; ctx.shadowBlur = 6;
+    const text = isFinal ? 'FINISH' : sl.c.short;
+    const dist = isFinal ? r*0.83 : r - 22;
+    ctx.font = `800 ${isFinal ? 26 : 38}px ${FONT}`;
+    ctx.textAlign = flip ? 'left' : 'right';
+    ctx.fillText(text, flip ? -dist : dist, 0);
     ctx.restore();
   });
 
+  // Centre cap
   ctx.beginPath(); ctx.arc(cx, cy, 34, 0, 2*Math.PI);
   ctx.fillStyle = INK; ctx.fill();
   ctx.strokeStyle = WHITE; ctx.lineWidth = 6; ctx.stroke();
@@ -1434,7 +1745,18 @@ function updateHub(){
 }
 
 function setSpinEnabled(on){
-  $('spinBtn').disabled = !on || spinning;
+  const b = $('spinBtn');
+  b.disabled = !on || spinning;
+  let label = 'Spin';
+  if(spinning) label = 'Spinning\u2026';
+  else if(b.disabled && current){
+    label = current.opener ? 'Finish the warm-up to spin'
+      : current.next ? 'Run the penalty first'
+      : current.final ? 'Run to the finish'
+      : 'Finish this challenge to spin';
+  }
+  b.textContent = label;
+  b.classList.toggle('glow', !b.disabled && !REDUCED);
 }
 function spin(){
   if(spinning || current || !running || !slices.length) return;
@@ -1458,7 +1780,7 @@ function spin(){
     angle = from + (to - from)*e;
     drawWheel();
     if(p < 1) requestAnimationFrame(frame);
-    else { spinning = false; drawWheel(); onLand(idx); }
+    else { spinning = false; drawWheel(); onLand(idx); setSpinEnabled(!current && running && !finished); }
   }
   requestAnimationFrame(frame);
 }
@@ -1547,7 +1869,7 @@ function settle(manual = false){
     angle = from + (to - from)*e;
     drawWheel();
     if(p < 1) requestAnimationFrame(frame);
-    else { spinning = false; drawWheel(); onLand(idx, manual); }
+    else { spinning = false; drawWheel(); onLand(idx, manual); setSpinEnabled(!current && running && !finished); }
   }
   requestAnimationFrame(frame);
 }
