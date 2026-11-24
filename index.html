@@ -780,10 +780,12 @@ function showHistory(){
 
 // ---------- Trophies: awarded for a single completed run at least this long (DNFs excluded) ----------
 const TROPHIES = [
-  {km: 10, name: '10 km', badge: '10K'},
-  {km: 21.0975, name: 'Half Marathon', badge: '21K'},
-  {km: 42.195, name: 'Marathon', badge: '42K'},
-  {km: 50, name: 'Ultramarathon', badge: '50K'}
+  {km: 5, name: '5 km', badge: '5K', label: '5 km'},
+  {km: 10, name: '10 km', badge: '10K', label: '10 km'},
+  {km: 16, name: '10-Miler', badge: '16K', label: '16 km'},
+  {km: 21.0975, name: 'Half Marathon', badge: '21K', label: '21.1 km'},
+  {km: 42.195, name: 'Marathon', badge: '42K', label: '42.2 km'},
+  {km: 50, name: 'Ultramarathon', badge: '50K', label: '50 km'}
 ];
 const EPS = 0.001;
 function newTrophies(prevRuns, run){
@@ -806,9 +808,13 @@ function renderTrophies(){
     tile.querySelector('.hex').textContent = earned ? t.badge : '🔒';
     tile.querySelector('b').textContent = t.name;
     const d = earned ? trophyDate(runs, t) : null;
-    tile.querySelector('small').textContent = earned
-      ? (d ? d.toLocaleDateString() : 'Earned')
-      : `Complete a ${t.name} run`;
+    const small = tile.querySelector('small');
+    if(earned){
+      small.append(t.label);
+      if(d){ small.append(document.createElement('br'), d.toLocaleDateString()); }
+    } else {
+      small.textContent = `Complete a ${t.label} run`;
+    }
     grid.appendChild(tile);
   });
 }
