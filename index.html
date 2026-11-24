@@ -3,12 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#151517">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="SPIN-A-RUN">
 <title>SPIN-A-RUN</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -185,20 +179,119 @@ button:disabled{opacity:.35;cursor:default}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{padding:8px 14px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--muted);font-weight:600;font-size:14px}
 .chip.on{background:var(--red);border-color:var(--red);color:#fff}
+/* Sleek pass: gradients, depth, glass tab bar */
+body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -8%,rgba(229,57,53,.22),transparent 62%),linear-gradient(180deg,#1b1b1f 0%,#0e0e10 100%);background-repeat:no-repeat}
+.splash{background:radial-gradient(100% 70% at 50% 28%,rgba(229,57,53,.3),transparent 65%),linear-gradient(180deg,#1b1b1f,#0b0b0d)}
+.brand-name,.big span{background:linear-gradient(180deg,#fff 25%,#b4b4be);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.card{background:linear-gradient(145deg,#27272d,#18181b);border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 6px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+.card.sel{border-color:var(--red);background:linear-gradient(145deg,#3b1e1f,#1c1416);box-shadow:0 0 0 1px var(--red),0 8px 24px rgba(229,57,53,.25)}
+.primary{background:linear-gradient(135deg,#ff5a4f 0%,#e53935 55%,#b71c1c 100%);box-shadow:0 8px 22px rgba(229,57,53,.35),inset 0 1px 0 rgba(255,255,255,.25)}
+.primary:disabled{box-shadow:none}
+.ghost,.cinput{background:linear-gradient(145deg,#2a2a30,#1a1a1e);border:1px solid rgba(255,255,255,.1)}
+.challenge,.stats,.medal-block,.route,.medal-tile{background:linear-gradient(145deg,#26262c,#18181b);border:1px solid rgba(255,255,255,.06);box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.challenge{border-left:5px solid var(--red)}
+.challenge[data-type="final"]{border-left-color:#fff}
+.challenge[data-type="done"]{border-left-color:var(--muted)}
+.bar{background:#0f0f11;box-shadow:inset 0 1px 2px rgba(0,0,0,.6)}
+#chBar{background:linear-gradient(90deg,#e53935,#ff7a45);box-shadow:0 0 10px rgba(229,57,53,.55)}
+.row{border-top-color:rgba(255,255,255,.1)}
+.tabs{background:rgba(24,24,27,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid rgba(255,255,255,.08)}
+.hex{background:linear-gradient(160deg,#ff6a5e,#d32f2f 60%,#8e1b1b)}
+.hex.dim{background:linear-gradient(160deg,#4a4a52,#2d2d33)}
+.check{background:linear-gradient(135deg,#ff5a4f,#c62828);box-shadow:0 6px 18px rgba(229,57,53,.45)}
+.hub{background:radial-gradient(circle at 50% 35%,#2b2b32,#111113);box-shadow:0 0 24px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+.chip.on{background:linear-gradient(135deg,#ff5a4f,#d32f2f);border-color:transparent}
+#wheel{filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
+.confirm{position:fixed;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);border-top:none}
+.modal{width:min(340px,100%);display:flex;flex-direction:column;gap:12px;background:linear-gradient(145deg,#2a2a30,#18181b);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:22px;box-shadow:0 20px 50px rgba(0,0,0,.6);animation:popin .18s ease-out}
+.modal p{font-size:17px;font-weight:600;text-align:center}
+@keyframes popin{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.startcircle{display:none;position:absolute;inset:0;border-radius:50%;align-items:center;justify-content:center;font-family:'Racing Sans One',var(--font);font-size:clamp(40px,14vw,64px);letter-spacing:.04em;color:#fff;background:radial-gradient(circle at 35% 28%,#ff6a5e,#e53935 55%,#a31616);box-shadow:0 12px 40px rgba(229,57,53,.45),inset 0 2px 0 rgba(255,255,255,.3);z-index:5}
+#screen-run.ready .startcircle{display:flex}
+#screen-run.ready #wheel,#screen-run.ready #hub{visibility:hidden}
+#screen-run.ready .wheel-wrap::before{display:none}
+#readyBack{display:none}
+#screen-run.ready #readyBack{display:block}
+#screen-run.ready #spinBtn,#screen-run.ready #dnfBtn,#screen-run.ready .skip-btn{display:none!important}
+@keyframes reveal{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes revealhub{from{transform:translate(-50%,-50%) scale(.55);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+#wheel.reveal{animation:reveal .5s ease-out}
+.hub.reveal{animation:revealhub .5s ease-out}
+@media (prefers-reduced-motion:reduce){#wheel.reveal,.hub.reveal{animation:none}}
+.tabs{left:50%;right:auto;transform:translateX(-50%);width:calc(100% - 24px);max-width:416px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);padding:7px;gap:6px;justify-content:space-between;border-radius:22px;background:rgba(28,28,32,.86);border:1px solid rgba(255,255,255,.09);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.tabs button{flex:1;padding:8px 4px;border-radius:16px;font-size:12px;gap:3px;transition:background .2s,color .2s}
+.tabs button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tabs button.on{color:#fff;background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.06));box-shadow:inset 0 1px 0 rgba(255,255,255,.12)}
+.card{border:1.5px solid transparent;background:linear-gradient(145deg,#27272d,#18181b) padding-box,linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.05)) border-box}
+.card.sel{border-color:transparent;background:linear-gradient(145deg,#3b1e1f,#1c1416) padding-box,linear-gradient(135deg,#ff7568 0%,#e53935 50%,#a31616 100%) border-box;box-shadow:0 0 22px rgba(229,57,53,.45),0 8px 28px rgba(229,57,53,.3)}
+.alpha{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:3px 9px}
+.splash .alpha{margin-top:6px}
+.brand .alpha{align-self:flex-start;margin-top:4px}
+#warmToggle{display:none!important}
+.red{color:var(--red)}
+.tutorial{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 16px) 22px calc(env(safe-area-inset-bottom,0px) + 22px);background:radial-gradient(120% 50% at 50% -6%,rgba(229,57,53,.24),transparent 62%),linear-gradient(180deg,#1b1b1f,#0e0e10)}
+.tutorial.hidden{display:none!important}
+.tut-skip{align-self:flex-end;color:var(--muted);font-weight:600;font-size:15px;padding:8px}
+.tut-viewport{flex:1;overflow:hidden;position:relative;touch-action:pan-y;max-width:440px;width:100%;margin:0 auto}
+.tut-track{display:flex;height:100%;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.tut-slide{flex:0 0 100%;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 4px;text-align:center;user-select:none}
+.tut-kicker{font-family:'Racing Sans One',var(--font);font-size:26px;letter-spacing:.02em;margin:0;color:var(--muted)}
+.tut-pill{align-self:center;background:linear-gradient(135deg,#ff5a4f,#e53935);color:#fff;font-weight:800;font-size:14px;letter-spacing:.12em;text-transform:uppercase;padding:6px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(229,57,53,.35)}
+.tut-h{margin:0;font-family:'Racing Sans One',var(--font);font-size:46px;line-height:1;letter-spacing:.01em;text-transform:uppercase}
+.tut-text{margin:0;font-size:18px;line-height:1.5;color:#d6d6dc}
+.tut-step{display:flex;gap:14px;align-items:flex-start;text-align:left;background:linear-gradient(145deg,#222227,#18181b);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px}
+.tut-step .num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff5a4f,#d32f2f);color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center}
+.tut-step b{font-family:'Racing Sans One',var(--font);font-size:24px;letter-spacing:.02em}
+.tut-step p{margin:2px 0 0;font-size:15px;color:#b9b9c2;line-height:1.4}
+.tut-trophy{border:1px solid rgba(229,57,53,.35);border-radius:16px;padding:14px;font-size:16px;color:#d6d6dc;background:rgba(229,57,53,.06);line-height:1.45}
+.tut-dots{display:flex;justify-content:center;gap:8px;margin:18px 0 16px}
+.tut-dots span{width:22px;height:4px;border-radius:2px;background:#3a3a41;transition:background .3s}
+.tut-dots span.on{background:var(--red)}
+.tut-nav{display:grid;grid-template-columns:1fr 1.4fr;gap:12px;max-width:440px;width:100%;margin:0 auto}
+.tut-nav button{padding:16px}
 </style>
 </head>
 <body>
+
+<div id="tutorial" class="tutorial hidden">
+  <button id="tutSkip" class="tut-skip">Skip</button>
+  <div class="tut-viewport" id="tutViewport">
+    <div class="tut-track" id="tutTrack">
+      <section class="tut-slide">
+        <p class="tut-kicker">SPIN-A-RUN</p>
+        <h2 class="tut-h" style="font-size:34px">The Game</h2>
+        <span class="tut-pill">The goal</span>
+        <p class="tut-text">Keep running through random distances until your spin lands on <b class="red">FINISH!</b></p>
+        <p class="tut-text" style="color:var(--muted);font-size:16px">A simple game that turns running into a challenge of chance, endurance, and a little luck.</p>
+      </section>
+      <section class="tut-slide">
+        <h2 class="tut-h">How it works</h2>
+        <div class="tut-step"><span class="num">1</span><div><b>SPIN</b><p>Spin the wheel to get your next running distance.</p></div></div>
+        <div class="tut-step"><span class="num">2</span><div><b>RUN</b><p>Run the distance you got.</p></div></div>
+        <div class="tut-step"><span class="num">3</span><div><b>REPEAT</b><p>Spin again and keep running until you land on <b class="red">FINISH!</b></p></div></div>
+      </section>
+      <section class="tut-slide">
+        <h2 class="tut-h">Land on <span class="red">FINISH!</span></h2>
+        <p class="tut-text">The game ends when your spin finally lands on <b class="red">FINISH</b>.</p>
+      </section>
+    </div>
+  </div>
+  <div class="tut-dots"><span class="on"></span><span></span><span></span></div>
+  <div class="tut-nav"><button id="tutBack" class="ghost">Back</button><button id="tutNext" class="primary">Next</button></div>
+</div>
 
 <div id="splash" class="splash">
   <svg width="180" height="180" viewBox="0 0 1254 1254" aria-hidden="true"><path d="M142 137 L107 177 L83 217 L67 258 L59 303 L59 944 L64 979 L81 1032 L102 1072 L130 1109 L152 1131 L173 1148 L217 1174 L258 1188 L301 1194 L965 1193 L1002 1186 L1033 1175 L1065 1158 L1099 1133 L1132 1099 L1162 1055 L1172 1035 L1186 995 L1194 945 L1193 297 L1184 255 L1170 219 L1146 178 L1114 140 L1084 114 L1035 86 L983 69 L945 64 L303 64 L277 67 L252 73 L217 86 L172 112 Z" fill="#000000"/><path d="M589 565 L577 574 L548 608 L547 617 L551 622 L555 624 L563 622 L594 590 L623 593 L624 596 L572 681 L567 686 L511 712 L507 717 L506 723 L512 732 L522 733 L577 711 L588 704 L613 671 L618 669 L658 693 L656 701 L630 759 L631 766 L634 770 L638 772 L645 772 L651 767 L687 694 L687 684 L684 679 L639 646 L660 615 L679 635 L686 639 L691 639 L741 615 L745 610 L746 604 L741 596 L732 594 L691 612 L666 583 L651 572 L640 569 Z M670 517 L661 521 L654 528 L650 536 L649 548 L653 559 L661 567 L670 571 L681 571 L691 567 L700 558 L703 551 L703 537 L700 530 L691 521 L682 517 Z M521 253 L483 266 L439 287 L417 300 L390 319 L365 340 L339 366 L305 408 L282 444 L262 483 L244 532 L235 572 L231 604 L230 649 L233 686 L239 720 L247 751 L259 785 L282 833 L309 875 L328 899 L367 940 L387 957 L421 981 L450 998 L479 1012 L515 1025 L548 1033 L586 1039 L613 1041 L665 1039 L700 1033 L751 1018 L780 1006 L813 989 L843 970 L878 943 L909 913 L937 880 L960 846 L978 813 L994 775 L1004 743 L1012 705 L1017 657 L1017 620 L1013 579 L1003 532 L980 468 L965 439 L946 409 L903 357 L864 322 L827 296 L808 285 L755 261 L699 245 L692 244 L685 261 L686 263 L718 270 L748 280 L779 293 L820 316 L816 325 L718 481 L715 483 L701 475 L675 465 L636 458 L612 458 L590 461 L570 466 L535 481 L469 377 L432 314 L454 301 L496 282 L537 269 L568 263 L561 244 Z M813 965 L772 988 L740 1001 L702 1012 L648 1020 L592 1019 L535 1009 L487 993 L454 977 L436 966 L538 805 L560 815 L588 823 L608 826 L640 826 L675 819 L711 803 L720 814 Z M445 689 L458 722 L475 750 L501 779 L523 796 L422 956 L420 956 L381 926 L352 897 L320 857 L301 827 L283 792 L266 746 L283 739 Z M994 651 L996 653 L995 678 L985 734 L972 776 L951 821 L929 856 L897 896 L861 931 L828 955 L739 815 L727 793 L754 770 L768 753 L782 731 L796 699 L803 670 L804 653 L806 651 Z M254 583 L262 583 L437 624 L441 627 L440 659 L442 673 L263 729 L261 727 L256 706 L250 658 L250 619 Z M611 475 L644 476 L681 485 L706 497 L733 517 L757 544 L776 578 L784 603 L788 632 L786 668 L778 698 L767 722 L748 750 L721 776 L692 794 L665 804 L638 809 L609 809 L574 802 L546 790 L518 771 L498 751 L477 721 L461 683 L456 656 L457 622 L463 596 L477 564 L496 536 L519 513 L543 496 L578 481 Z M836 327 L863 347 L899 382 L929 420 L953 460 L972 502 L986 548 L995 597 L995 634 L806 634 L804 632 L803 613 L798 590 L783 553 L762 522 L751 510 L731 493 L797 386 Z M417 324 L520 490 L506 501 L487 520 L468 546 L452 578 L444 607 L439 608 L259 566 L257 564 L272 511 L283 485 L309 437 L332 405 L353 380 L381 352 Z M566 174 L558 180 L555 189 L556 194 L619 335 L624 339 L629 339 L635 333 L661 272 L698 192 L697 183 L692 176 L685 173 Z" fill="#ffffff" fill-rule="evenodd"/><path d="M255 583 L251 623 L251 653 L255 692 L263 728 L356 698 L441 673 L438 647 L439 626 Z" fill="#e51e14" fill-rule="evenodd"/></svg>
   <div class="brand-name">SPIN-A-RUN</div>
   <p class="tagline">How far will you run today?</p>
+  <span class="alpha">Alpha Build</span>
 </div>
 
 <section id="screen-setup" class="screen">
   <div class="brand">
     <svg width="58" height="58" viewBox="0 0 1254 1254" aria-hidden="true"><path d="M142 137 L107 177 L83 217 L67 258 L59 303 L59 944 L64 979 L81 1032 L102 1072 L130 1109 L152 1131 L173 1148 L217 1174 L258 1188 L301 1194 L965 1193 L1002 1186 L1033 1175 L1065 1158 L1099 1133 L1132 1099 L1162 1055 L1172 1035 L1186 995 L1194 945 L1193 297 L1184 255 L1170 219 L1146 178 L1114 140 L1084 114 L1035 86 L983 69 L945 64 L303 64 L277 67 L252 73 L217 86 L172 112 Z" fill="#000000"/><path d="M589 565 L577 574 L548 608 L547 617 L551 622 L555 624 L563 622 L594 590 L623 593 L624 596 L572 681 L567 686 L511 712 L507 717 L506 723 L512 732 L522 733 L577 711 L588 704 L613 671 L618 669 L658 693 L656 701 L630 759 L631 766 L634 770 L638 772 L645 772 L651 767 L687 694 L687 684 L684 679 L639 646 L660 615 L679 635 L686 639 L691 639 L741 615 L745 610 L746 604 L741 596 L732 594 L691 612 L666 583 L651 572 L640 569 Z M670 517 L661 521 L654 528 L650 536 L649 548 L653 559 L661 567 L670 571 L681 571 L691 567 L700 558 L703 551 L703 537 L700 530 L691 521 L682 517 Z M521 253 L483 266 L439 287 L417 300 L390 319 L365 340 L339 366 L305 408 L282 444 L262 483 L244 532 L235 572 L231 604 L230 649 L233 686 L239 720 L247 751 L259 785 L282 833 L309 875 L328 899 L367 940 L387 957 L421 981 L450 998 L479 1012 L515 1025 L548 1033 L586 1039 L613 1041 L665 1039 L700 1033 L751 1018 L780 1006 L813 989 L843 970 L878 943 L909 913 L937 880 L960 846 L978 813 L994 775 L1004 743 L1012 705 L1017 657 L1017 620 L1013 579 L1003 532 L980 468 L965 439 L946 409 L903 357 L864 322 L827 296 L808 285 L755 261 L699 245 L692 244 L685 261 L686 263 L718 270 L748 280 L779 293 L820 316 L816 325 L718 481 L715 483 L701 475 L675 465 L636 458 L612 458 L590 461 L570 466 L535 481 L469 377 L432 314 L454 301 L496 282 L537 269 L568 263 L561 244 Z M813 965 L772 988 L740 1001 L702 1012 L648 1020 L592 1019 L535 1009 L487 993 L454 977 L436 966 L538 805 L560 815 L588 823 L608 826 L640 826 L675 819 L711 803 L720 814 Z M445 689 L458 722 L475 750 L501 779 L523 796 L422 956 L420 956 L381 926 L352 897 L320 857 L301 827 L283 792 L266 746 L283 739 Z M994 651 L996 653 L995 678 L985 734 L972 776 L951 821 L929 856 L897 896 L861 931 L828 955 L739 815 L727 793 L754 770 L768 753 L782 731 L796 699 L803 670 L804 653 L806 651 Z M254 583 L262 583 L437 624 L441 627 L440 659 L442 673 L263 729 L261 727 L256 706 L250 658 L250 619 Z M611 475 L644 476 L681 485 L706 497 L733 517 L757 544 L776 578 L784 603 L788 632 L786 668 L778 698 L767 722 L748 750 L721 776 L692 794 L665 804 L638 809 L609 809 L574 802 L546 790 L518 771 L498 751 L477 721 L461 683 L456 656 L457 622 L463 596 L477 564 L496 536 L519 513 L543 496 L578 481 Z M836 327 L863 347 L899 382 L929 420 L953 460 L972 502 L986 548 L995 597 L995 634 L806 634 L804 632 L803 613 L798 590 L783 553 L762 522 L751 510 L731 493 L797 386 Z M417 324 L520 490 L506 501 L487 520 L468 546 L452 578 L444 607 L439 608 L259 566 L257 564 L272 511 L283 485 L309 437 L332 405 L353 380 L381 352 Z M566 174 L558 180 L555 189 L556 194 L619 335 L624 339 L629 339 L635 333 L661 272 L698 192 L697 183 L692 176 L685 173 Z" fill="#ffffff" fill-rule="evenodd"/><path d="M255 583 L251 623 L251 653 L255 692 L263 728 L356 698 L441 673 L438 647 L439 626 Z" fill="#e51e14" fill-rule="evenodd"/></svg>
     <div class="brand-name">SPIN-A-RUN</div>
+    <span class="alpha">Alpha Build</span>
   </div>
   <div class="mountains" aria-hidden="true">
     <svg viewBox="0 0 400 70" preserveAspectRatio="none"><path d="M0 70 L50 28 L95 50 L150 8 L205 46 L255 22 L310 52 L355 18 L400 40 L400 70Z" fill="#26262c"/></svg>
@@ -231,7 +324,8 @@ button:disabled{opacity:.35;cursor:default}
     <p class="note">Separate distances with commas. Use m or km. Up to 10 distances.</p>
   </div>
   <label class="toggle hidden" id="warmToggle"><input type="checkbox" id="skipWarm"> Skip the warm-up</label>
-  <button id="startBtn" class="primary" disabled>▶ Start Run</button>
+  <button id="startBtn" class="primary" disabled>Run</button>
+  <button id="howToBtn" class="link">How to play</button>
   <button id="simBtn" class="link" disabled>Simulate GPS for indoor testing</button>
   <p class="note">Real GPS needs location permission and works best outdoors with the screen on.</p>
 </section>
@@ -252,14 +346,15 @@ button:disabled{opacity:.35;cursor:default}
     <p id="chProgress" class="small muted"></p>
   </div>
   <div id="warn" class="warn hidden"></div>
-  <div class="wheel-wrap"><div id="ring" class="ring"></div><canvas id="wheel" width="640" height="640"></canvas><div id="hub" class="hub"><span id="hubValue" class="hub-value">--</span><span id="hubLabel" class="hub-label">spin</span></div></div>
+  <div class="wheel-wrap"><div id="ring" class="ring"></div><button id="startCircle" class="startcircle" aria-label="Start run">START</button><canvas id="wheel" width="640" height="640"></canvas><div id="hub" class="hub"><span id="hubValue" class="hub-value">--</span><span id="hubLabel" class="hub-label">spin</span></div></div>
   <button id="spinBtn" class="primary">Spin</button>
   <button id="dnfBtn" class="dnf-small">End Run</button>
-  <div id="dnfConfirm" class="confirm hidden">
+  <button id="readyBack" class="link">Back to menu</button>
+  <div id="dnfConfirm" class="confirm hidden"><div class="modal">
     <p>End this run as a DNF? It stays in your history but earns no medal.</p>
     <button id="dnfYes" class="danger">Yes, end as DNF</button>
     <button id="dnfNo" class="primary">Keep running</button>
-  </div>
+  </div></div>
   <p id="gpsStatus" class="small muted"></p>
 </section>
 
@@ -315,9 +410,9 @@ button:disabled{opacity:.35;cursor:default}
 </section>
 
 <nav class="tabs" id="tabs">
-  <button data-tab="setup">Run</button>
-  <button data-tab="history">History</button>
-  <button data-tab="medals">Medals</button>
+  <button data-tab="setup"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="15" cy="4" r="2"/><path d="M12 8l-3 4 3 3-1 5M9 12l-4 2M13 8l3 3 3-1M10 15l-3 4"/></svg><span>Run</span></button>
+  <button data-tab="history"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>History</span></button>
+  <button data-tab="medals"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14.5" r="5.5"/><path d="M8.5 10 6 3h4l2 3.5M15.5 10 18 3h-4l-2 3.5"/></svg><span>Medals</span></button>
 </nav>
 
 <script>
@@ -357,7 +452,7 @@ function fmtPace(secPerKm){
 }
 
 // ---------- State ----------
-let level = null, simulate = false, histFilter = 'all';
+let level = null, simulate = false, histFilter = 'all', readyMode = false;
 let running = false, finished = false, spinning = false, angle = 0;
 let slices = [], current = null, completed = [];
 let last = null, recent = [], route = [], totalDist = 0, startT = 0;
@@ -553,6 +648,41 @@ $('customCommit').onclick = commitCustom;
 $('customReset').onclick = resetCustom;
 $('customBack').onclick = () => show('setup');
 
+// ---------- Swipeable how-to-play ----------
+let tutIndex = 0;
+const TUT_LAST = 2;
+function tutGo(i){
+  tutIndex = Math.max(0, Math.min(TUT_LAST, i));
+  $('tutTrack').style.transform = `translateX(${-tutIndex*100}%)`;
+  document.querySelectorAll('.tut-dots span').forEach((d, k) => d.classList.toggle('on', k === tutIndex));
+  $('tutBack').disabled = tutIndex === 0;
+  $('tutNext').textContent = tutIndex === TUT_LAST ? "Let’s Go!" : 'Next';
+}
+function openTutorial(){ tutGo(0); $('tutorial').classList.remove('hidden'); }
+function closeTutorial(){
+  $('tutorial').classList.add('hidden');
+  try { localStorage.setItem('spinrun.tutorialDone', '1'); } catch(e) {}
+}
+function maybeTutorial(){
+  try { if(localStorage.getItem('spinrun.tutorialDone')) return; } catch(e) {}
+  openTutorial();
+}
+$('tutSkip').onclick = closeTutorial;
+$('tutBack').onclick = () => tutGo(tutIndex - 1);
+$('tutNext').onclick = () => { if(tutIndex < TUT_LAST) tutGo(tutIndex + 1); else closeTutorial(); };
+$('howToBtn').onclick = openTutorial;
+// Swipe left or right to change slides
+let tutStartX = null;
+$('tutViewport').addEventListener('pointerdown', e => { tutStartX = e.clientX; });
+$('tutViewport').addEventListener('pointerup', e => {
+  if(tutStartX === null) return;
+  const dx = e.clientX - tutStartX;
+  tutStartX = null;
+  if(dx < -40) tutGo(tutIndex + 1);
+  else if(dx > 40) tutGo(tutIndex - 1);
+});
+$('tutViewport').addEventListener('pointercancel', () => { tutStartX = null; });
+
 $('startBtn').onclick = () => { simulate = false; start(); };
 $('simBtn').onclick = () => { simulate = true; start(); };
 
@@ -694,10 +824,24 @@ function start(){
   resetRun();
   show('run');
   unlockAudio();
+  buildWheel();
+  readyMode = true;
+  $('screen-run').classList.add('ready');
+  $('sDist').textContent = '0.00'; $('sTime').textContent = '00:00';
+  $('sPace').textContent = '--:--'; $('sSpeed').textContent = '--:--';
+  $('chLabel').textContent = 'Tap START when you are ready';
+  drawWheel();
+}
+
+// Pressing START turns the red circle into the wheel and begins the run with the warm-up
+function go(){
+  if(!readyMode) return;
+  readyMode = false;
+  $('screen-run').classList.remove('ready');
+  ['wheel','hub'].forEach(id => { const el = $(id); el.classList.remove('reveal'); void el.offsetWidth; el.classList.add('reveal'); });
   running = true;
   keepAwake();
   startT = Date.now();
-  buildWheel();
   drawWheel();
   tickTimer = setInterval(tick, 1000);
   if(simulate) startSim(); else startGPS();
@@ -800,6 +944,9 @@ $('dnfNo').onclick = () => {
   $('dnfBtn').classList.remove('hidden');
 };
 $('dnfYes').onclick = () => { if(running) finish(true); };
+$('startCircle').onclick = go;
+$('readyBack').onclick = () => { readyMode = false; $('screen-run').classList.remove('ready'); show('setup'); };
+$('dnfConfirm').addEventListener('click', e => { if(e.target === $('dnfConfirm')) $('dnfNo').click(); });
 
 // Skip the warm-up from the progress bar and go straight to the first spin
 $('skipWarmBtn').onclick = () => {
@@ -1134,7 +1281,9 @@ function drawWheel(){
     const a0 = angle + A[i].start, a1 = a0 + A[i].arc;
     const isFinal = sl.type === 'final';
     ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
-    ctx.fillStyle = isFinal ? RED : SLICE; ctx.fill();
+    const gr = ctx.createRadialGradient(cx, cy, r*0.25, cx, cy, r);
+    gr.addColorStop(0, isFinal ? '#ff6a5e' : '#36363d'); gr.addColorStop(1, isFinal ? '#b71c1c' : '#202025');
+    ctx.fillStyle = gr; ctx.fill();
     ctx.strokeStyle = INK; ctx.lineWidth = 5; ctx.stroke();
     ctx.save();
     ctx.translate(cx, cy); ctx.rotate(a0 + A[i].arc/2);
@@ -1306,7 +1455,7 @@ drawWheel();
 // Title page for 2 seconds, then the main menu
 setTimeout(() => {
   $('splash').classList.add('out');
-  setTimeout(() => $('splash').classList.add('hidden'), 450);
+  setTimeout(() => { $('splash').classList.add('hidden'); maybeTutorial(); }, 450);
 }, 2000);
 </script>
 </body>
