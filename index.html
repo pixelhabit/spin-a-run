@@ -273,6 +273,18 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
 .tut-flow{display:flex;flex-direction:column;align-items:center;gap:4px;border:1.5px solid rgba(229,57,53,.6);border-radius:14px;padding:10px;background:rgba(229,57,53,.06)}
 .tut-row{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.04em;text-transform:uppercase;font-size:15px}
 .tut-row i{font-style:normal;color:var(--muted)}
+/* Trophy and medal artwork: greyed out until earned */
+.trophy-img{width:84px;height:84px;object-fit:contain;filter:drop-shadow(0 6px 12px rgba(0,0,0,.5));transition:filter .3s,opacity .3s}
+.trophy-img.locked{filter:grayscale(1) brightness(.55) contrast(.9);opacity:.5}
+.medal-tile.locked{opacity:1}
+.medal-tile.locked b,.medal-tile.locked small{color:var(--muted)}
+.medal-block .trophy-img{width:104px;height:104px;flex-shrink:0}
+#sumTrophy:empty{display:none}
+#sumTrophy{display:flex;flex-direction:column;gap:12px}
+.trophy-row{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;background:linear-gradient(145deg,#26262c,#18181b);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px}
+.trophy-row div{display:flex;flex-direction:column;align-items:center;gap:6px}
+.trophy-row .trophy-img{width:96px;height:96px}
+.trophy-row b{font-size:14px}
 </style>
 </head>
 <body>
@@ -399,7 +411,7 @@ body{background-color:#0e0e10;background-image:radial-gradient(120% 55% at 50% -
   </div>
   <div class="stats" id="sumStats"></div>
   <div id="sumMedal"></div>
-  <p id="sumTrophy" class="note"></p>
+  <div id="sumTrophy"></div>
   <p class="section-title">Route</p>
   <div class="route" id="sumRoute"></div>
   <p class="section-title">Challenges</p>
@@ -464,7 +476,11 @@ const LEVELS = {
 };
 const OPENER_M = 3000;        // warm-up run before the first spin (Kids: 200 m)
 const FINAL_M = 1000;         // finish run, reached by landing on the small slice
-const FINAL_WEIGHT = 0.35;    // finish slice is about a third of a normal slice
+const FINAL_WEIGHT = 0.35;    // finish slice starts at about a third of a normal slice
+const FINAL_GROWTH = 0.15;    // ...and grows by this much after each completed challenge
+const FINAL_MAX = 2;          // ...up to twice the size of a normal slice
+let challengesDone = 0;
+function finishWeight(){ return Math.min(FINAL_MAX, FINAL_WEIGHT + FINAL_GROWTH * challengesDone); }
 const NORMAL_SLICES = 6;      // normal slices per wheel
 
 // Kids is level 0; display helpers keep it from showing as 'Level 0'
@@ -780,13 +796,24 @@ function showHistory(){
 
 // ---------- Trophies: awarded for a single completed run at least this long (DNFs excluded) ----------
 const TROPHIES = [
-  {km: 5, name: '5 km', badge: '5K', label: '5 km'},
-  {km: 10, name: '10 km', badge: '10K', label: '10 km'},
-  {km: 16, name: '10-Miler', badge: '16K', label: '16 km'},
-  {km: 21.0975, name: 'Half Marathon', badge: '21K', label: '21.1 km'},
-  {km: 42.195, name: 'Marathon', badge: '42K', label: '42.2 km'},
-  {km: 50, name: 'Ultramarathon', badge: '50K', label: '50 km'}
+  {km: 5, name: '5 km', badge: '5K', label: '5 km', img: '5k'},
+  {km: 10, name: '10 km', badge: '10K', label: '10 km', img: '10k'},
+  {km: 16, name: '10-Miler', badge: '16K', label: '16 km', img: '16k'},
+  {km: 21.0975, name: 'Half Marathon', badge: '21K', label: '21.1 km', img: '21k'},
+  {km: 42.195, name: 'Marathon', badge: '42K', label: '42.2 km', img: '42k'},
+  {km: 50, name: 'Ultramarathon', badge: '50K', label: '50 km', img: 'ultra'}
 ];
+// Trophy and medal artwork (web-sized copies in trophies/web)
+const ART = n => `trophies/web/${n}.webp`;
+function artImg(name, locked, alt){
+  const im = document.createElement('img');
+  im.src = ART(name); im.alt = alt || ''; im.className = 'trophy-img' + (locked ? ' locked' : '');
+  im.decoding = 'async';
+  return im;
+}
+// Preload the finisher medal so the story image can draw it
+const MEDAL_ART = new Image(); MEDAL_ART.src = ART('finisher');
+const TROPHY_ART = {}; TROPHIES.forEach(t => { const i = new Image(); i.src = ART(t.img); TROPHY_ART[t.name] = i; });
 const EPS = 0.001;
 function newTrophies(prevRuns, run){
   if(run.dnf) return [];
@@ -804,14 +831,14 @@ function renderTrophies(){
     const earned = runs.some(r => !r.dnf && r.km >= t.km - EPS);
     const tile = document.createElement('div');
     tile.className = 'medal-tile' + (earned ? '' : ' locked');
-    tile.innerHTML = `<div class="hex sm ${earned ? '' : 'dim'}"></div><b></b><small></small>`;
-    tile.querySelector('.hex').textContent = earned ? t.badge : '🔒';
+    tile.innerHTML = '<b></b><small></small>';
+    tile.prepend(artImg(t.img, !earned, `${t.name} trophy${earned ? '' : ' (locked)'}`));
     tile.querySelector('b').textContent = t.name;
     const d = earned ? trophyDate(runs, t) : null;
     const small = tile.querySelector('small');
     if(earned){
-      small.append(t.label);
-      if(d){ small.append(document.createElement('br'), d.toLocaleDateString()); }
+      if(t.label !== t.name) small.append(t.label, document.createElement('br'));
+      if(d) small.append(d.toLocaleDateString());
     } else {
       small.textContent = `Complete a ${t.label} run`;
     }
@@ -825,14 +852,22 @@ function showMedals(){
   const runs = loadRuns().filter(r => !r.dnf);
   const grid = $('medalGrid'); grid.innerHTML = '';
   $('medalEmpty').classList.toggle('hidden', runs.length > 0);
+  if(!runs.length){
+    // A greyed-out medal shows what the first finished run earns
+    const tile = document.createElement('div');
+    tile.className = 'medal-tile locked';
+    tile.innerHTML = '<b>Finisher</b><small>Finish a run</small>';
+    tile.prepend(artImg('finisher', true, 'Finisher medal (locked)'));
+    grid.appendChild(tile);
+  }
   runs.forEach(run => {
     const tile = document.createElement('div');
     tile.className = 'medal-tile';
     tile.tabIndex = 0;
-    tile.innerHTML = '<div class="hex sm"></div><b></b><small></small>';
-    tile.querySelector('.hex').textContent = medalCode(run.level);
+    tile.innerHTML = '<b></b><small></small>';
+    tile.prepend(artImg('finisher', false, 'Finisher medal'));
     tile.querySelector('b').textContent = `${run.km.toFixed(2)} km`;
-    tile.querySelector('small').textContent = new Date(run.date).toLocaleDateString();
+    tile.querySelector('small').append(levelName(run.level), document.createElement('br'), new Date(run.date).toLocaleDateString());
     tile.onclick = () => showRunDetail(run, false, 'medals');
     tile.onkeydown = e => { if(e.key === 'Enter') showRunDetail(run, false, 'medals'); };
     grid.appendChild(tile);
@@ -843,7 +878,7 @@ function showMedals(){
 // ---------- Run lifecycle ----------
 function resetRun(){
   running = false; finished = false; spinning = false;
-  slices = []; current = null; completed = [];
+  slices = []; current = null; completed = []; challengesDone = 0;
   last = null; recent = []; route = []; totalDist = 0;
   $('chLabel').textContent = 'Ready';
   $('chBar').style.width = '0%';
@@ -954,13 +989,23 @@ function showRunDetail(run, isNew, from){
     sumStats.appendChild(d);
   });
   const medalBox = $('sumMedal');
-  if(run.dnf){
-    medalBox.innerHTML = '<p class="note">No medal for a DNF. Start a new run to earn one.</p>';
-  } else {
-    medalBox.innerHTML = `<div class="medal-block"><div class="hex lg"></div><div><b>${levelName(run.level)} Finisher</b><small>Placeholder medal artwork</small></div></div>`;
-    medalBox.querySelector('.hex').textContent = medalCode(run.level);
+  medalBox.innerHTML = '<div class="medal-block"><div><b></b><small></small></div></div>';
+  medalBox.querySelector('.medal-block').prepend(artImg('finisher', run.dnf, run.dnf ? 'Finisher medal (not earned)' : 'Finisher medal'));
+  medalBox.querySelector('b').textContent = run.dnf ? 'No medal' : `${levelName(run.level)} Finisher`;
+  medalBox.querySelector('small').textContent = run.dnf ? 'DNF runs don’t earn a medal.' : 'Medal earned';
+  const tBox = $('sumTrophy'); tBox.innerHTML = '';
+  const won = TROPHIES.filter(t => (run.trophies || []).includes(t.name));
+  if(won.length){
+    const head = document.createElement('p'); head.className = 'section-title'; head.textContent = 'Trophy unlocked';
+    const row = document.createElement('div'); row.className = 'trophy-row';
+    won.forEach(t => {
+      const cell = document.createElement('div');
+      cell.append(artImg(t.img, false, `${t.name} trophy`));
+      const name = document.createElement('b'); name.textContent = t.name; cell.append(name);
+      row.append(cell);
+    });
+    tBox.append(head, row);
   }
-  $('sumTrophy').textContent = run.trophies && run.trophies.length ? 'Trophy unlocked: ' + run.trophies.join(', ') : '';
   $('sumRoute').innerHTML = routeSVG(run.route);
   const ul = $('sumList'); ul.innerHTML = '';
   if(!run.challenges.length){
@@ -1023,7 +1068,9 @@ function makeStory(run){
   g.fillText(`${new Date(run.date).toLocaleDateString()} · ${levelName(run.level)}`, pad, 300);
 
   const kmText = run.km.toFixed(2);
-  g.fillStyle = WHITE; g.font = `800 340px ${FONT}`;
+  g.fillStyle = WHITE;
+  let kmSize = 340; g.font = `800 ${kmSize}px ${FONT}`;
+  while(kmSize > 160 && g.measureText(kmText).width + 150 > W - 2*pad){ kmSize -= 10; g.font = `800 ${kmSize}px ${FONT}`; }
   g.fillText(kmText, pad - 10, 690);
   const kmW = g.measureText(kmText).width;
   g.fillStyle = MUTED; g.font = `600 80px ${FONT}`;
@@ -1053,7 +1100,22 @@ function makeStory(run){
     g.fillText('No route recorded', rx + 40, ry + rh/2);
   }
 
-  if(!run.dnf){
+  const artOk = im => im && im.complete && im.naturalWidth > 0;
+  if(!run.dnf && artOk(MEDAL_ART)){
+    const mh = 165, mw = mh * MEDAL_ART.naturalWidth / MEDAL_ART.naturalHeight;
+    g.drawImage(MEDAL_ART, pad, 1640, mw, mh);
+    g.textAlign = 'left';
+    g.fillStyle = WHITE; g.font = `800 50px ${FONT}`;
+    g.fillText(`${levelName(run.level)} Finisher`, pad + 200, 1732);
+    const won = TROPHIES.filter(t => (run.trophies || []).includes(t.name));
+    g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
+    g.fillText(won.length ? 'Trophy: ' + won.map(t => t.name).join(', ') : 'Medal earned', pad + 200, 1790);
+    const top = won[won.length - 1];
+    if(top && artOk(TROPHY_ART[top.name])){
+      const ti = TROPHY_ART[top.name], th = 200, tw = th * ti.naturalWidth / ti.naturalHeight;
+      g.drawImage(ti, W - pad - tw, 1640, tw, th);
+    }
+  } else if(!run.dnf){
     g.fillStyle = RED;
     g.beginPath();
     const cx = pad + 80, cy = 1740, r = 80;
@@ -1069,7 +1131,7 @@ function makeStory(run){
     g.fillStyle = WHITE; g.font = `800 50px ${FONT}`;
     g.fillText(`${levelName(run.level)} Finisher`, pad + 200, 1732);
     g.fillStyle = MUTED; g.font = `600 36px ${FONT}`;
-    g.fillText('Placeholder medal artwork', pad + 200, 1790);
+    g.fillText('Medal earned', pad + 200, 1790);
   } else {
     g.fillStyle = MUTED; g.font = `600 40px ${FONT}`;
     g.fillText('No medal for a DNF', pad, 1748);
@@ -1143,7 +1205,7 @@ function tick(){
 // ---------- GPS ----------
 function startGPS(){
   if(!navigator.geolocation){
-    $('gpsStatus').textContent = 'GPS not available in this browser. Use Simulate.';
+    $('gpsStatus').textContent = 'GPS not available in this browser.';
     return;
   }
   $('gpsStatus').textContent = 'Waiting for GPS fix...';
@@ -1157,10 +1219,10 @@ function startGPS(){
   );
 }
 function gpsErrorText(e){
-  if(e.code === 1) return 'Location access is blocked for this page. Allow location in your browser or phone settings and reload, or use Simulate.';
-  if(e.code === 2) return 'Your phone can\u2019t get a GPS position right now. Try outdoors with a clear view of the sky, or use Simulate.';
-  if(e.code === 3) return 'GPS is taking a while. Still trying. Move outdoors if you can, or use Simulate.';
-  return 'GPS isn\u2019t working. Use Simulate to keep testing.';
+  if(e.code === 1) return 'Location access is blocked for this page. Allow location in your browser or phone settings and reload.';
+  if(e.code === 2) return 'Your phone can\u2019t get a GPS position right now. Try outdoors with a clear view of the sky.';
+  if(e.code === 3) return 'GPS is taking a while. Still trying. Move outdoors if you can.';
+  return 'GPS isn\u2019t working.';
 }
 function startSim(){
   $('gpsStatus').textContent = 'Simulated GPS (no real location)';
@@ -1224,6 +1286,7 @@ function completeChallenge(){
   }
   completed.push(current.label);
   const wasFinal = !!current.final;
+  const wasOpener = !!current.opener;
   current = null;
   $('chBar').style.width = '100%';
   $('challengeBox').dataset.type = 'done';
@@ -1236,6 +1299,12 @@ function completeChallenge(){
   }
   $('chLabel').textContent = 'Challenge complete';
   $('chProgress').textContent = 'Spin for your next challenge';
+  if(!wasOpener){
+    // Each finished challenge makes the FINISH slice bigger on the wheel
+    challengesDone++;
+    const fin = slices.find(x => x.type === 'final');
+    if(fin){ fin.w = finishWeight(); drawWheel(); }
+  }
   setSpinEnabled(true);
 }
 
@@ -1285,7 +1354,7 @@ function buildWheel(){
     c: mkDist(order ? order[i % order.length] : pool[Math.floor(Math.random()*pool.length)])
   }));
   const finish = {
-    type: 'final', w: FINAL_WEIGHT,
+    type: 'final', w: finishWeight(),
     c: {type:'distance', target:FINAL_M, short:'1 km FINISH', label:'1 km FINISH 🏁', final:true}
   };
   slices = shuffle([...normals, finish]);
